@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HelpCenter - FAQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Poppins:wght@700&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-1: #48ACFF;
+      --blue-2: #3794FF;
+      --blue-3: #2378FF;
+      --blue-4: #1F70F0;
+      --text-dark: #3F3F3F;
+      --text-mid: #507289;
+      --text-link: #0A7FD1;
+      --bg-light: #F8F8F8;
+      --white: #FFFFFF;
+      --border: #E0E0E0;
+    }
+
+    body {
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+    }
+
+    /* =============================
+       HEADER
+    ============================= */
+    .header {
+      background: var(--white);
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+    }
+
+    .header__inner {
+      width: 100%;
+      max-width: 1440px;
+      padding: 0 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo__mark {
+      width: 33px;
+      height: 33px;
+      background: var(--text-dark);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+
+    .logo__name {
+      font-family: 'Inter', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .header__nav {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .header__nav a {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-dark);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header__nav a:hover { color: var(--text-link); }
+
+    .header__sp-actions {
+      display: none;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header__contact-sp {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-dark);
+      text-decoration: none;
+    }
+
+    .header__menu-btn {
+      width: 32px;
+      height: 32px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      padding: 4px;
+    }
+
+    .header__menu-btn span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text-link);
+      border-radius: 1px;
+    }
+
+    /* =============================
+       KV (Hero)
+    ============================= */
+    .kv {
+      position: relative;
+      background: var(--blue-1);
+      height: 540px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    .kv__bg-circles {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translate(18%, -50%);
+      width: 800px;
+      height: 800px;
+      pointer-events: none;
+    }
+
+    .kv__bg-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+    }
+
+    .kv__bg-circle--1 {
+      width: 800px;
+      height: 800px;
+      background: var(--blue-1);
+      box-shadow:
+        inset 9px 9px 120px rgba(126, 207, 255, 0.45),
+        9px 9px 30px rgba(0, 0, 0, 0.04);
+    }
+
+    .kv__bg-circle--2 {
+      width: 590px;
+      height: 585px;
+      background: var(--blue-2);
+    }
+
+    .kv__bg-circle--3 {
+      width: 448px;
+      height: 444px;
+      background: var(--blue-3);
+    }
+
+    .kv__bg-circle--4 {
+      width: 293px;
+      height: 293px;
+      background: var(--blue-4);
+    }
+
+    .kv__content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 180px;
+    }
+
+    .kv__title {
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.5;
+      margin-bottom: 40px;
+    }
+
+    .kv__search {
+      width: 600px;
+      height: 71px;
+      background: var(--white);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px 0 28px;
+    }
+
+    .kv__search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text-mid);
+      background: transparent;
+    }
+
+    .kv__search-input::placeholder { color: var(--text-mid); }
+
+    .kv__search-btn {
+      width: 30px;
+      height: 30px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* =============================
+       SECTION COMMON
+    ============================= */
+    .section {
+      padding: 80px 0;
+    }
+
+    .section--white { background: var(--white); }
+    .section--light { background: var(--bg-light); }
+
+    .section__inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      position: relative;
+      margin-bottom: 48px;
+      padding-top: 12px;
+    }
+
+    .section-title__en {
+      font-family: 'Poppins', sans-serif;
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--text-mid);
+      opacity: 0.18;
+      line-height: 1;
+      position: absolute;
+      top: 0;
+      left: -6px;
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .section-title__label {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding-top: 28px;
+    }
+
+    .section-title__line {
+      display: inline-block;
+      width: 2px;
+      height: 32px;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    .section-title__text {
+      font-size: 21.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .section-title--news .section-title__label { color: var(--text-mid); }
+    .section-title--category .section-title__label { color: var(--text-link); }
+    .section-title--faq .section-title__label { color: var(--text-link); }
+
+    /* =============================
+       NEWS
+    ============================= */
+    .news__list {
+      list-style: none;
+      border-top: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+
+    .news__item {
+      display: flex;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .news__item:hover .news__title { color: var(--text-link); }
+
+    .news__date {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-mid);
+      white-space: nowrap;
+      width: 120px;
+      flex-shrink: 0;
+    }
+
+    .news__title {
+      flex: 1;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-dark);
+      padding: 0 24px;
+      transition: color 0.15s;
+    }
+
+    .news__arrow {
+      flex-shrink: 0;
+      width: 8px;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 5px solid var(--text-mid);
+    }
+
+    .news__more {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--white);
+      border: none;
+      cursor: pointer;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-link);
+      padding: 18px 28px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border-radius: 4px;
+      transition: box-shadow 0.15s;
+    }
+
+    .news__more:hover { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12); }
+
+    .news__more-icon {
+      width: 16px;
+      height: 16px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .news__more-icon::before,
+    .news__more-icon::after {
+      content: '';
+      position: absolute;
+      background: var(--text-link);
+    }
+
+    .news__more-icon::before {
+      width: 13px;
+      height: 2px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .news__more-icon::after {
+      width: 2px;
+      height: 13px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* =============================
+       CATEGORY
+    ============================= */
+    .category__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .category-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 32px 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      min-height: 204px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      text-decoration: none;
+      transition: box-shadow 0.2s;
+      cursor: pointer;
+    }
+
+    .category-card:hover { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); }
+
+    .category-card__icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--blue-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .category-card__icon svg {
+      width: 32px;
+      height: 32px;
+      fill: var(--white);
+    }
+
+    .category-card__body { flex: 1; }
+
+    .category-card__title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-link);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .category-card__desc {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    /* =============================
+       FAQ
+    ============================= */
+    .faq__list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .faq-item {
+      background: var(--white);
+      border-bottom: 1px solid #EBEBEB;
+    }
+
+    .faq-item:first-child { border-radius: 8px 8px 0 0; }
+    .faq-item:last-child {
+      border-radius: 0 0 8px 8px;
+      border-bottom: none;
+    }
+
+    .faq-item__q {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 24px 48px;
+      cursor: pointer;
+    }
+
+    .faq-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', sans-serif;
+      font-size: 33px;
+      font-weight: 700;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .faq-icon--q {
+      background: var(--blue-1);
+      color: var(--white);
+    }
+
+    .faq-icon--a {
+      background: var(--bg-light);
+      color: var(--text-mid);
+    }
+
+    .faq-item__q-text {
+      flex: 1;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    .faq-item__toggle {
+      width: 14px;
+      height: 14px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .faq-item__toggle::before,
+    .faq-item__toggle::after {
+      content: '';
+      position: absolute;
+      background: var(--text-mid);
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .faq-item__toggle::before {
+      width: 14px;
+      height: 2px;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+    }
+
+    .faq-item__toggle::after {
+      width: 2px;
+      height: 14px;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+    }
+
+    .faq-item.is-open .faq-item__toggle::after {
+      opacity: 0;
+    }
+
+    .faq-item__divider {
+      height: 1px;
+      background: #EBEBEB;
+      margin: 0 48px;
+    }
+
+    .faq-item__a {
+      display: none;
+      align-items: flex-start;
+      gap: 24px;
+      padding: 24px 48px;
+    }
+
+    .faq-item.is-open .faq-item__a {
+      display: flex;
+    }
+
+    .faq-item__a-text {
+      flex: 1;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-mid);
+      line-height: 1.75;
+      padding-top: 14px;
+    }
+
+    /* =============================
+       CTA
+    ============================= */
+    .cta {
+      background: var(--blue-1);
+      position: relative;
+      overflow: hidden;
+      padding: 80px 0;
+    }
+
+    .cta__bg-circles {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      transform: translate(25%, 35%);
+      width: 600px;
+      height: 600px;
+      pointer-events: none;
+    }
+
+    .cta__bg-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+    }
+
+    .cta__bg-circle--1 { width: 600px; height: 600px; background: var(--blue-1); }
+    .cta__bg-circle--2 { width: 442px; height: 438px; background: var(--blue-2); }
+    .cta__bg-circle--3 { width: 335px; height: 332px; background: var(--blue-3); }
+    .cta__bg-circle--4 { width: 219px; height: 219px; background: var(--blue-4); }
+
+    .cta__inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .cta__label {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .cta__title {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .cta__title-line {
+      display: inline-block;
+      width: 2px;
+      height: 48px;
+      background: var(--white);
+      flex-shrink: 0;
+    }
+
+    .cta__desc {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 36px;
+    }
+
+    .cta__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--white);
+      padding: 18px 32px;
+      border-radius: 4px;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-link);
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: box-shadow 0.15s;
+    }
+
+    .cta__btn:hover { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15); }
+
+    .cta__btn-arrow {
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 6px solid var(--text-link);
+      flex-shrink: 0;
+    }
+
+    /* =============================
+       FOOTER
+    ============================= */
+    .footer {
+      background: var(--text-mid);
+      padding: 60px 0 40px;
+    }
+
+    .footer__inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .footer__top {
+      display: flex;
+      justify-content: flex-start;
+      gap: 80px;
+      margin-bottom: 48px;
+    }
+
+    .footer__logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .footer__logo-mark {
+      width: 33px;
+      height: 33px;
+      background: var(--bg-light);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-mid);
+    }
+
+    .footer__logo-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--bg-light);
+    }
+
+    .footer__nav {
+      display: flex;
+      gap: 60px;
+    }
+
+    .footer__col-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    .footer__col-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      list-style: none;
+    }
+
+    .footer__col-links a {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      opacity: 0.9;
+    }
+
+    .footer__col-links a:hover { opacity: 1; text-decoration: underline; }
+
+    .footer__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .footer__copy {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    /* =============================
+       SP (MOBILE) — max-width: 768px
+    ============================= */
+    @media (max-width: 768px) {
+      /* Header */
+      .header__inner { padding: 0 24px; }
+      .header__nav { display: none; }
+      .header__sp-actions { display: flex; }
+
+      /* KV */
+      .kv { height: auto; min-height: 416px; padding: 80px 0 48px; }
+
+      .kv__bg-circles {
+        width: 500px;
+        height: 500px;
+        right: 0;
+        top: 50%;
+        transform: translate(35%, -50%);
+      }
+
+      .kv__bg-circle--1 { width: 500px; height: 500px; }
+      .kv__bg-circle--2 { width: 368px; height: 365px; }
+      .kv__bg-circle--3 { width: 280px; height: 277px; }
+      .kv__bg-circle--4 { width: 183px; height: 183px; }
+
+      .kv__content { padding: 0 24px; }
+
+      .kv__title {
+        font-size: 26px;
+        margin-bottom: 32px;
+      }
+
+      .kv__search {
+        width: 100%;
+        max-width: 327px;
+        height: 66px;
+        padding: 0 16px 0 20px;
+      }
+
+      .kv__search-input { font-size: 16px; }
+
+      /* Sections */
+      .section { padding: 56px 0; }
+      .section__inner { padding: 0 24px; }
+
+      .section-title__en { font-size: 48px; }
+      .section-title__label { padding-top: 20px; }
+      .section-title__text { font-size: 16px; }
+
+      /* News */
+      .news__date { width: auto; font-size: 14px; }
+      .news__title { font-size: 16px; padding: 0 12px; }
+      .news__item { align-items: flex-start; flex-wrap: wrap; gap: 4px; }
+      .news__date { width: 100%; }
+      .news__title { padding: 0; width: calc(100% - 20px); }
+
+      /* Category */
+      .category__grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .category-card {
+        padding: 24px 20px;
+        min-height: 160px;
+        gap: 16px;
+      }
+
+      .category-card__icon {
+        width: 64px;
+        height: 64px;
+      }
+
+      .category-card__icon svg { width: 26px; height: 26px; }
+
+      .category-card__title { font-size: 20px; }
+      .category-card__desc { font-size: 15px; }
+
+      /* FAQ */
+      .faq-item__q { padding: 20px 24px; gap: 16px; }
+      .faq-item__a { padding: 20px 24px; gap: 16px; }
+      .faq-item__divider { margin: 0 24px; }
+
+      .faq-icon { width: 42px; height: 42px; font-size: 25px; }
+
+      .faq-item__q-text { font-size: 16px; }
+      .faq-item__a-text { font-size: 15px; padding-top: 8px; }
+
+      /* CTA */
+      .cta { padding: 56px 0; }
+      .cta__inner { padding: 0 24px; }
+      .cta__label { font-size: 16px; }
+      .cta__title { font-size: 20px; gap: 12px; }
+      .cta__title-line { height: 30px; }
+      .cta__desc { font-size: 15px; }
+      .cta__btn { font-size: 16px; padding: 16px 24px; }
+
+      .cta__bg-circles {
+        width: 400px;
+        height: 400px;
+        transform: translate(30%, 35%);
+      }
+
+      .cta__bg-circle--1 { width: 400px; height: 400px; }
+      .cta__bg-circle--2 { width: 295px; height: 292px; }
+      .cta__bg-circle--3 { width: 224px; height: 221px; }
+      .cta__bg-circle--4 { width: 146px; height: 146px; }
+
+      /* Footer */
+      .footer { padding: 48px 0 32px; }
+      .footer__inner { padding: 0 24px; }
+
+      .footer__top {
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .footer__nav { flex-direction: column; gap: 32px; }
+      .footer__col-title { font-size: 16px; margin-bottom: 16px; }
+
+      .footer__bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =============================
+       HEADER
+  ============================= -->
+  <header class="header">
+    <div class="header__inner">
+      <a href="#" class="logo">
+        <div class="logo__mark">HC</div>
+        <span class="logo__name">HelpCenter</span>
+      </a>
+      <ul class="header__nav">
+        <li><a href="#">カテゴリ一覧</a></li>
+        <li><a href="#">お知らせ</a></li>
+        <li><a href="#">よくある質問</a></li>
+        <li><a href="#">お問い合わせ</a></li>
+      </ul>
+      <div class="header__sp-actions">
+        <a href="#" class="header__contact-sp">お問い合わせ</a>
+        <button class="header__menu-btn" aria-label="メニューを開く">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- =============================
+         KV
+    ============================= -->
+    <section class="kv">
+      <div class="kv__bg-circles" aria-hidden="true">
+        <div class="kv__bg-circle kv__bg-circle--1"></div>
+        <div class="kv__bg-circle kv__bg-circle--2"></div>
+        <div class="kv__bg-circle kv__bg-circle--3"></div>
+        <div class="kv__bg-circle kv__bg-circle--4"></div>
+      </div>
+      <div class="kv__content">
+        <h1 class="kv__title">どのようなことにお困りですか？</h1>
+        <div class="kv__search">
+          <input type="text" class="kv__search-input" placeholder="キーワードで検索">
+          <button class="kv__search-btn" aria-label="検索">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+              <circle cx="8.5" cy="8.5" r="6" stroke="#507289" stroke-width="2"/>
+              <path d="M13.5 13.5L18 18" stroke="#507289" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================
+         NEWS
+    ============================= -->
+    <section class="section section--light" id="news">
+      <div class="section__inner">
+        <div class="section-title section-title--news">
+          <span class="section-title__en" aria-hidden="true">News</span>
+          <div class="section-title__label">
+            <span class="section-title__line"></span>
+            <span class="section-title__text">お知らせ</span>
+            <span class="section-title__line"></span>
+          </div>
+        </div>
+
+        <ul class="news__list">
+          <li>
+            <a href="#" class="news__item">
+              <span class="news__date">2026年2月23日</span>
+              <span class="news__title">新料金プランのご案内</span>
+              <span class="news__arrow"></span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="news__item">
+              <span class="news__date">2026年2月23日</span>
+              <span class="news__title">新料金プランのご案内</span>
+              <span class="news__arrow"></span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="news__item">
+              <span class="news__date">2026年2月23日</span>
+              <span class="news__title">【復旧済み】一部機能が利用しづらい状況について</span>
+              <span class="news__arrow"></span>
+            </a>
+          </li>
+        </ul>
+
+        <button class="news__more">
+          もっと見る
+          <span class="news__more-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- =============================
+         CATEGORY
+    ============================= -->
+    <section class="section section--white" id="category">
+      <div class="section__inner">
+        <div class="section-title section-title--category">
+          <span class="section-title__en" aria-hidden="true">Category</span>
+          <div class="section-title__label">
+            <span class="section-title__line"></span>
+            <span class="section-title__text">カテゴリから探す</span>
+            <span class="section-title__line"></span>
+          </div>
+        </div>
+
+        <div class="category__grid">
+          <!-- アカウント設定 -->
+          <a href="#" class="category-card">
+            <div class="category-card__icon">
+              <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16" cy="11" r="6"/>
+                <path d="M4 28c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="category-card__body">
+              <p class="category-card__title">アカウント設定</p>
+              <p class="category-card__desc">登録情報の変更、パスワードリセットなど</p>
+            </div>
+          </a>
+
+          <!-- お支払い・料金 -->
+          <a href="#" class="category-card">
+            <div class="category-card__icon">
+              <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="7" width="26" height="18" rx="2" stroke="white" stroke-width="2" fill="none"/>
+                <path d="M3 13h26" stroke="white" stroke-width="2"/>
+                <rect x="7" y="18" width="6" height="3" rx="1" fill="white"/>
+              </svg>
+            </div>
+            <div class="category-card__body">
+              <p class="category-card__title">お支払い・料金</p>
+              <p class="category-card__desc">請求書、プラン変更、<br>決済方法など</p>
+            </div>
+          </a>
+
+          <!-- サービスの使い方 -->
+          <a href="#" class="category-card">
+            <div class="category-card__icon">
+              <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="16" cy="16" r="13" stroke="white" stroke-width="2" fill="none"/>
+                <path d="M12 12.5c0-2.21 1.79-4 4-4s4 1.79 4 4c0 2-2 3-2 5" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/>
+                <circle cx="16" cy="23" r="1.5" fill="white"/>
+              </svg>
+            </div>
+            <div class="category-card__body">
+              <p class="category-card__title">サービスの使い方</p>
+              <p class="category-card__desc">基本的な操作、<br>機能の解説など</p>
+            </div>
+          </a>
+
+          <!-- セキュリティ -->
+          <a href="#" class="category-card">
+            <div class="category-card__icon">
+              <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 3L5 7v8c0 6.627 4.925 12.826 11 14 6.075-1.174 11-7.373 11-14V7L16 3z" stroke="white" stroke-width="2" fill="none"/>
+                <path d="M11 16l3.5 3.5L21 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </div>
+            <div class="category-card__body">
+              <p class="category-card__title">セキュリティ</p>
+              <p class="category-card__desc">2段階認証、<br>ログイン履歴など</p>
+            </div>
+          </a>
+
+          <!-- トラブルシューティング -->
+          <a href="#" class="category-card">
+            <div class="category-card__icon">
+              <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <path d="M27 8.5a6 6 0 01-8 8L8 27a2.828 2.828 0 01-4-4l11-11a6 6 0 018-8l-4 4 1.5 1.5L22 8l.5 1.5L27 8.5z" stroke="white" stroke-width="2" fill="none" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="category-card__body">
+              <p class="category-card__title">トラブルシューティング</p>
+              <p class="category-card__desc">エラーが表示される、<br>動かない場合など</p>
+            </div>
+          </a>
+
+          <!-- その他 -->
+          <a href="#" class="category-card">
+            <div class="category-card__icon">
+              <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="16" r="2.5" fill="white"/>
+                <circle cx="16" cy="16" r="2.5" fill="white"/>
+                <circle cx="24" cy="16" r="2.5" fill="white"/>
+              </svg>
+            </div>
+            <div class="category-card__body">
+              <p class="category-card__title">その他</p>
+              <p class="category-card__desc">規約、退会、その他の<br>お問い合わせ</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================
+         FAQ
+    ============================= -->
+    <section class="section section--light" id="faq">
+      <div class="section__inner">
+        <div class="section-title section-title--faq">
+          <span class="section-title__en" aria-hidden="true">FAQ</span>
+          <div class="section-title__label">
+            <span class="section-title__line"></span>
+            <span class="section-title__text">よくある質問</span>
+            <span class="section-title__line"></span>
+          </div>
+        </div>
+
+        <div class="faq__list">
+          <!-- 1: open by default -->
+          <div class="faq-item is-open">
+            <div class="faq-item__q" role="button" tabindex="0" aria-expanded="true">
+              <div class="faq-icon faq-icon--q">Q</div>
+              <p class="faq-item__q-text">登録情報の変更、パスワードリセットなど</p>
+              <div class="faq-item__toggle" aria-hidden="true"></div>
+            </div>
+            <div class="faq-item__divider"></div>
+            <div class="faq-item__a" role="region">
+              <div class="faq-icon faq-icon--a">A</div>
+              <p class="faq-item__a-text">マイページの「アカウント情報」から変更可能です。<br>変更後は確認メールが送信されますので、<br>メールに記載のリンクをクリックして変更を完了させてください。</p>
+            </div>
+          </div>
+
+          <!-- 2 -->
+          <div class="faq-item">
+            <div class="faq-item__q" role="button" tabindex="0" aria-expanded="false">
+              <div class="faq-icon faq-icon--q">Q</div>
+              <p class="faq-item__q-text">領収書の発行はできますか？</p>
+              <div class="faq-item__toggle" aria-hidden="true"></div>
+            </div>
+            <div class="faq-item__divider" style="display:none"></div>
+            <div class="faq-item__a" role="region">
+              <div class="faq-icon faq-icon--a">A</div>
+              <p class="faq-item__a-text">マイページの「お支払い履歴」から領収書のPDFをダウンロードいただけます。</p>
+            </div>
+          </div>
+
+          <!-- 3 -->
+          <div class="faq-item">
+            <div class="faq-item__q" role="button" tabindex="0" aria-expanded="false">
+              <div class="faq-icon faq-icon--q">Q</div>
+              <p class="faq-item__q-text">プランの変更方法を教えてください</p>
+              <div class="faq-item__toggle" aria-hidden="true"></div>
+            </div>
+            <div class="faq-item__divider" style="display:none"></div>
+            <div class="faq-item__a" role="region">
+              <div class="faq-icon faq-icon--a">A</div>
+              <p class="faq-item__a-text">マイページの「プラン・お支払い」よりプランの変更が可能です。変更は即時反映されます。</p>
+            </div>
+          </div>
+
+          <!-- 4 -->
+          <div class="faq-item">
+            <div class="faq-item__q" role="button" tabindex="0" aria-expanded="false">
+              <div class="faq-icon faq-icon--q">Q</div>
+              <p class="faq-item__q-text">退会したいのですが</p>
+              <div class="faq-item__toggle" aria-hidden="true"></div>
+            </div>
+            <div class="faq-item__divider" style="display:none"></div>
+            <div class="faq-item__a" role="region">
+              <div class="faq-icon faq-icon--a">A</div>
+              <p class="faq-item__a-text">マイページの「アカウント設定」より退会手続きが可能です。退会後はデータの復元ができませんのでご注意ください。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================
+         CTA
+    ============================= -->
+    <section class="cta" id="contact">
+      <div class="cta__bg-circles" aria-hidden="true">
+        <div class="cta__bg-circle cta__bg-circle--1"></div>
+        <div class="cta__bg-circle cta__bg-circle--2"></div>
+        <div class="cta__bg-circle cta__bg-circle--3"></div>
+        <div class="cta__bg-circle cta__bg-circle--4"></div>
+      </div>
+      <div class="cta__inner">
+        <p class="cta__label">Contact</p>
+        <h2 class="cta__title">
+          <span class="cta__title-line"></span>
+          解決しない場合はこちら
+          <span class="cta__title-line"></span>
+        </h2>
+        <p class="cta__desc">お探しの情報が見つからない場合は、サポートチームにお問い合わせください。</p>
+        <a href="#" class="cta__btn">
+          お問い合わせフォームへ
+          <span class="cta__btn-arrow" aria-hidden="true"></span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =============================
+       FOOTER
+  ============================= -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__top">
+        <nav class="footer__nav">
+          <div class="footer__col">
+            <p class="footer__col-title">カテゴリ</p>
+            <ul class="footer__col-links">
+              <li><a href="#">アカウント設定</a></li>
+              <li><a href="#">お支払い・料金</a></li>
+              <li><a href="#">サービスの使い方</a></li>
+              <li><a href="#">セキュリティ</a></li>
+              <li><a href="#">トラブルシューティング</a></li>
+              <li><a href="#">その他</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <p class="footer__col-title">ヘルプ</p>
+            <ul class="footer__col-links">
+              <li><a href="#">お問い合わせ</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <p class="footer__col-title">運営</p>
+            <ul class="footer__col-links">
+              <li><a href="#">お知らせ</a></li>
+              <li><a href="#">運営会社</a></li>
+              <li><a href="#">プライバシーポリシー</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="footer__bottom">
+        <a href="#" class="footer__logo">
+          <div class="footer__logo-mark">HC</div>
+          <span class="footer__logo-name">HelpCenter</span>
+        </a>
+        <p class="footer__copy">© 2026 FAQ Center All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ Accordion
+    document.querySelectorAll('.faq-item__q').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var item = this.closest('.faq-item');
+        var isOpen = item.classList.contains('is-open');
+
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(function(el) {
+          el.classList.remove('is-open');
+          el.querySelector('[aria-expanded]').setAttribute('aria-expanded', 'false');
+          var divider = el.querySelector('.faq-item__divider');
+          if (divider) divider.style.display = 'none';
+        });
+
+        // Open clicked if it was closed
+        if (!isOpen) {
+          item.classList.add('is-open');
+          this.setAttribute('aria-expanded', 'true');
+          var divider = item.querySelector('.faq-item__divider');
+          if (divider) divider.style.display = '';
+        }
+      });
+
+      btn.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.click();
+        }
+      });
+    });
+
+    // Show divider for initially open items
+    document.querySelectorAll('.faq-item.is-open .faq-item__divider').forEach(function(el) {
+      el.style.display = '';
+    });
+  </script>
+</body>
+</html>
