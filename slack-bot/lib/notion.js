@@ -1,5 +1,11 @@
 const NOTION_API = 'https://api.notion.com/v1';
 
+// DBのID（Vercel環境変数で管理。将来DBが増えたら環境変数を追加する）
+const DB_IDS = {
+  partnerProjects: process.env.NOTION_PARTNER_PROJECT_DB_ID ?? 'bb9b7945290f442694de5a75013cfee2',
+  // taskManagement: process.env.NOTION_TASK_DB_ID,  // 将来追加
+};
+
 async function notionFetch(path, body, timeoutMs = 15000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -21,14 +27,6 @@ async function notionFetch(path, body, timeoutMs = 15000) {
   }
 }
 
-// 日本語の助詞・質問ワードのみ除去（pj_ などのプレフィックスは保持）
-function extractKeyword(message) {
-  return message
-    .replace(/を教えて|について|のリンク|のページ|のNotionページ|はどこ|教えて|お願い|ください|してほしい/g, '')
-    .replace(/Notionの?|notionの?/gi, '')
-    .trim();
-}
-
 function extractTitle(page) {
   const props = page.properties ?? {};
   for (const key of Object.keys(props)) {
@@ -40,78 +38,107 @@ function extractTitle(page) {
   return page.child_page?.title ?? '無題';
 }
 
-// パートナー事業プロジェクト一覧DBを直接クエリ
-const PARTNER_PROJECT_DB_ID = 'bb9b7945290f442694de5a75013cfee2';
+function getPropText(prop) {
+  if (!prop) return null;
+  switch (prop.type) {
+    case 'select':       return prop.select?.name ?? null;
+    case 'multi_select': return prop.multi_select?.map(s => s.name).join(', ') || null;
+    case 'status':       return prop.status?.name ?? null;
+    case 'people':       return prop.people?.map(p => p.name).join(', ') || null;
+    case 'date':         return prop.date?.start ?? null;
+    case 'rich_text':    return prop.rich_text?.[0]?.plain_text ?? null;
+    case 'url':          return prop.url ?? null;
+    default:             return null;
+  }
+}
 
-async function queryProjectDB(keyword) {
+// パートナープロジェクトDBを直接クエリ
+export async function queryProjectDB(keyword) {
+  console.log('ProjectDB query keyword:', keyword);
   try {
-    const data = await notionFetch(`/databases/${PARTNER_PROJECT_DB_ID}/query`, {
+    const data = await notionFetch(`/databases/${DB_IDS.partnerProjects}/query`, {
       filter: {
         property: 'プロジェクト名',
         title: { contains: keyword },
       },
       page_size: 5,
     });
-    console.log('ProjectDB query results:', data.results?.length ?? 0);
-    return data.results ?? [];
-  } catch (e) {
-    console.error('ProjectDB query error:', e.message);
-    return [];
+
+    const results = data.results ?? [];
+    console.log('ProjectDB results:', results.length);
+
+    if (results.length === 0) return 'プロジェクトDBに該当するプロジェクトは見つかりませんでした。';
+
+    const summaries = results.map(page => {
+      const props = page.properties ?? {};
+      const title = extractTitle(page);
+      const pageId = page.id.replace(/-/g, '');
+      const url = `https://www.notion.so/${pageId}`;
+
+      const lines = [`*${title}*`, `URL: ${url}`];
+      const fieldMap = {
+        'ステータス': 'ステータス',
+        '事業カテゴリ': '事業カテゴリ',
+        'P(推進者)': '推進者',
+        'メンバー': 'メンバー',
+        '開始日': '開始日',
+        '終了日': '終了日',
+      };
+      for (const [propName, label] of Object.entries(fieldMap)) {
+        const val = getPropText(props[propName]);
+        if (val) lines.push(`• ${label}: ${val}`);
+      }
+      return lines.join('\n');
+    });
+
+    return summaries.join('\n\n---\n\n');
+  } catch (error) {
+    console.error('ProjectDB query error:', error.name === 'AbortError' ? 'Timeout' : error.message);
+    return '';
   }
 }
 
+// 日本語の助詞・質問ワードのみ除去
+function extractKeyword(message) {
+  return message
+    .replace(/を教えて|について|のリンク|のページ|のNotionページ|はどこ|教えて|お願い|ください|してほしい/g, '')
+    .replace(/Notionの?|notionの?/gi, '')
+    .trim();
+}
+
+// Notion全体の横断検索（議事録・ナレッジなどプロジェクトDB以外の情報）
 export async function searchNotion(query) {
   const keyword = extractKeyword(query);
   console.log('Notion search keyword:', keyword);
 
   try {
-    // 全文検索 + プロジェクトDB直接クエリを並行実行
-    const [data1, dbResults] = await Promise.all([
-      notionFetch('/search', { query: keyword, filter: { value: 'page', property: 'object' }, page_size: 6 }),
-      queryProjectDB(keyword),
-    ]);
-
-    // 結果をマージしてIDで重複排除（DBクエリ結果を優先）
-    const seen = new Set();
-    const allResults = [...dbResults, ...(data1.results ?? [])].filter(page => {
-      if (seen.has(page.id)) return false;
-      seen.add(page.id);
-      return true;
+    const data = await notionFetch('/search', {
+      query: keyword,
+      filter: { value: 'page', property: 'object' },
+      page_size: 6,
     });
 
-    console.log('Merged results count:', allResults.length);
-    if (allResults.length === 0) return '該当するNotionページは見つかりませんでした。';
+    const results = data.results ?? [];
+    console.log('Notion search results:', results.length);
+    if (results.length === 0) return '該当するNotionページは見つかりませんでした。';
 
     const kw = keyword.toLowerCase();
-
-    const pages = allResults.map(page => {
-      // タイトル抽出の詳細ログ
-      const propKeys = Object.keys(page.properties ?? {});
-      const titleProp = propKeys.find(k => page.properties[k]?.type === 'title');
-      const rawTitle = titleProp ? JSON.stringify(page.properties[titleProp].title) : 'NO_TITLE_PROP';
-      console.log(`[RAW] id=${page.id} child_page=${page.child_page?.title ?? 'none'} titleProp=${titleProp} raw=${rawTitle}`);
-
+    const pages = results.map(page => {
       const title = extractTitle(page);
       const pageId = page.id.replace(/-/g, '');
       const url = `https://www.notion.so/${pageId}`;
-
-      const isPjPage = title.toLowerCase().startsWith('pj_');
       const isTitleMatch = title.toLowerCase().includes(kw);
-
-      // pj_はタイトルに検索語も含む場合のみ加点（無関係なpj_ページを上位にしない）
-      const score = (isPjPage && isTitleMatch) ? 3 : isTitleMatch ? 1 : 0;
-      const label = isPjPage && isTitleMatch ? '[プロジェクトページ]' : isTitleMatch ? '[タイトル一致]' : '[本文に言及あり]';
-
-      console.log(`[Candidate] title="${title}" score=${score} label=${label} url=${url}`);
-      return { title, url, score, label };
+      console.log(`[Candidate] "${title}" titleMatch=${isTitleMatch} ${url}`);
+      return { title, url, isTitleMatch };
     });
 
-    // スコア順に並び替え
-    pages.sort((a, b) => b.score - a.score);
+    pages.sort((a, b) => (b.isTitleMatch ? 1 : 0) - (a.isTitleMatch ? 1 : 0));
 
-    const candidates = pages.map(p => `- ${p.title} ${p.label}: ${p.url}`);
+    const candidates = pages.map(p =>
+      `- ${p.title}${p.isTitleMatch ? ' [タイトル一致]' : ''}: ${p.url}`
+    );
 
-    return `Notion検索候補（[プロジェクトページ]を最優先に、ユーザーの意図に最も合うページを選んで回答してください）:\n${candidates.join('\n')}`;
+    return `Notion検索候補（ユーザーの意図に最も合うページを選んで回答してください）:\n${candidates.join('\n')}`;
   } catch (error) {
     console.error('Notion search error:', error.name === 'AbortError' ? 'Timeout' : error.message);
     return '';
