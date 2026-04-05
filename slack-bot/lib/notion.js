@@ -40,21 +40,40 @@ function extractTitle(page) {
   return page.child_page?.title ?? '無題';
 }
 
+// パートナー事業プロジェクト一覧DBを直接クエリ
+const PARTNER_PROJECT_DB_ID = 'bb9b7945290f442694de5a75013cfee2';
+
+async function queryProjectDB(keyword) {
+  try {
+    const data = await notionFetch(`/databases/${PARTNER_PROJECT_DB_ID}/query`, {
+      filter: {
+        property: 'プロジェクト名',
+        title: { contains: keyword },
+      },
+      page_size: 5,
+    });
+    console.log('ProjectDB query results:', data.results?.length ?? 0);
+    return data.results ?? [];
+  } catch (e) {
+    console.error('ProjectDB query error:', e.message);
+    return [];
+  }
+}
+
 export async function searchNotion(query) {
   const keyword = extractKeyword(query);
-  const pjKeyword = `pj_${keyword}`;
-  console.log('Notion search keywords:', keyword, '/', pjKeyword);
+  console.log('Notion search keyword:', keyword);
 
   try {
-    // 通常キーワードとpj_プレフィックス付きを並行検索
-    const [data1, data2] = await Promise.all([
+    // 全文検索 + プロジェクトDB直接クエリを並行実行
+    const [data1, dbResults] = await Promise.all([
       notionFetch('/search', { query: keyword, filter: { value: 'page', property: 'object' }, page_size: 6 }),
-      notionFetch('/search', { query: pjKeyword, filter: { value: 'page', property: 'object' }, page_size: 4 }),
+      queryProjectDB(keyword),
     ]);
 
-    // 結果をマージしてIDで重複排除
+    // 結果をマージしてIDで重複排除（DBクエリ結果を優先）
     const seen = new Set();
-    const allResults = [...(data2.results ?? []), ...(data1.results ?? [])].filter(page => {
+    const allResults = [...dbResults, ...(data1.results ?? [])].filter(page => {
       if (seen.has(page.id)) return false;
       seen.add(page.id);
       return true;
