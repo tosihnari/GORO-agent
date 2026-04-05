@@ -47,9 +47,7 @@ export async function searchNotion(query) {
     const summaries = data.results.map(page => {
       const props = page.properties ?? {};
       const propKeys = Object.keys(props);
-      console.log('Page prop keys:', propKeys);
 
-      // タイトルプロパティを動的に探す
       let title = '無題';
       for (const key of propKeys) {
         const prop = props[key];
@@ -58,8 +56,12 @@ export async function searchNotion(query) {
           break;
         }
       }
-      console.log('Found title:', title);
-      return `- ${title}`;
+
+      // NotionページのURL（IDのハイフンを除去）
+      const pageId = page.id.replace(/-/g, '');
+      const url = `https://www.notion.so/${pageId}`;
+      console.log('Found title:', title, 'URL:', url);
+      return `- ${title}: ${url}`;
     });
 
     return `関連するNotionページ:\n${summaries.join('\n')}`;
