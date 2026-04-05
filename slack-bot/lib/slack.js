@@ -31,6 +31,19 @@ export async function postMessage(token, channel, text, threadTs) {
   return data;
 }
 
+export async function getThreadReplies(token, channel, threadTs) {
+  const params = new URLSearchParams({ channel, ts: threadTs });
+  const res = await fetch(`https://slack.com/api/conversations.replies?${params}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  if (!data.ok) {
+    console.error('Slack thread replies error:', data.error);
+    return [];
+  }
+  return data.messages ?? [];
+}
+
 export async function getChannelHistory(token, channel, limit = 30) {
   const params = new URLSearchParams({ channel, limit });
   const res = await fetch(`https://slack.com/api/conversations.history?${params}`, {

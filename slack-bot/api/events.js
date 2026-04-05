@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from 'crypto';
 import { askClaude } from '../lib/claude.js';
-import { postMessage, addReaction } from '../lib/slack.js';
+import { postMessage, addReaction, getThreadReplies } from '../lib/slack.js';
 
 export const config = {
   api: { bodyParser: false },
@@ -61,8 +61,14 @@ export default async function handler(req, res) {
     // 処理中であることをリアクションで即時通知
     await addReaction(process.env.SLACK_BOT_TOKEN, event.channel, event.ts, 'eyes');
 
+    // スレッド内の場合は過去の会話履歴を取得
+    let threadHistory = [];
+    if (event.thread_ts) {
+      threadHistory = await getThreadReplies(process.env.SLACK_BOT_TOKEN, event.channel, event.thread_ts);
+    }
+
     // Claudeが意図を判断してツールを使いながら回答
-    const reply = await askClaude(userMessage, event.channel);
+    const reply = await askClaude(userMessage, event.channel, threadHistory);
     await postMessage(process.env.SLACK_BOT_TOKEN, event.channel, reply, event.ts);
   } catch (error) {
     console.error('Error:', error);

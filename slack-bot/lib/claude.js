@@ -81,8 +81,27 @@ const TOOLS = [
   },
 ];
 
-export async function askClaude(userMessage, channelId) {
-  const messages = [{ role: 'user', content: userMessage }];
+export async function askClaude(userMessage, channelId, threadHistory = []) {
+  // スレッド履歴をClaudeの会話形式に変換（最新メッセージ除く）
+  const historyMessages = [];
+  const pastMessages = threadHistory
+    .filter(m => m.text && m.ts !== threadHistory.at(-1)?.ts) // 最新メッセージは除く
+    .slice(-10); // 直近10件まで
+
+  for (const m of pastMessages) {
+    const text = m.text.replace(/<@[A-Z0-9]+>/g, '').trim();
+    if (!text) continue;
+    if (m.bot_id) {
+      historyMessages.push({ role: 'assistant', content: text });
+    } else {
+      historyMessages.push({ role: 'user', content: text });
+    }
+  }
+
+  // 会話が交互になるよう調整（Claudeは必ずuser→assistantの順が必要）
+  const messages = historyMessages.length > 0
+    ? [...historyMessages, { role: 'user', content: userMessage }]
+    : [{ role: 'user', content: userMessage }];
 
   for (let i = 0; i < 4; i++) {
     const response = await client.messages.create({
