@@ -29,50 +29,64 @@ function extractKeyword(message) {
     .trim();
 }
 
+function extractTitle(page) {
+  const props = page.properties ?? {};
+  for (const key of Object.keys(props)) {
+    const prop = props[key];
+    if (prop?.type === 'title' && prop.title?.[0]?.plain_text) {
+      return prop.title[0].plain_text;
+    }
+  }
+  return page.child_page?.title ?? '無題';
+}
+
 export async function searchNotion(query) {
   const keyword = extractKeyword(query);
-  console.log('Notion search keyword:', keyword);
+  const pjKeyword = `pj_${keyword}`;
+  console.log('Notion search keywords:', keyword, '/', pjKeyword);
+
   try {
-    const data = await notionFetch('/search', {
-      query: keyword,
-      filter: { value: 'page', property: 'object' },
-      page_size: 8,
+    // 通常キーワードとpj_プレフィックス付きを並行検索
+    const [data1, data2] = await Promise.all([
+      notionFetch('/search', { query: keyword, filter: { value: 'page', property: 'object' }, page_size: 6 }),
+      notionFetch('/search', { query: pjKeyword, filter: { value: 'page', property: 'object' }, page_size: 4 }),
+    ]);
+
+    // 結果をマージしてIDで重複排除
+    const seen = new Set();
+    const allResults = [...(data2.results ?? []), ...(data1.results ?? [])].filter(page => {
+      if (seen.has(page.id)) return false;
+      seen.add(page.id);
+      return true;
     });
 
-    console.log('Notion search results count:', data.results?.length ?? 0);
-
-    if (!data.results || data.results.length === 0) return '該当するNotionページは見つかりませんでした。';
+    console.log('Merged results count:', allResults.length);
+    if (allResults.length === 0) return '該当するNotionページは見つかりませんでした。';
 
     const kw = keyword.toLowerCase();
 
-    const pages = data.results.map(page => {
-      const props = page.properties ?? {};
-
-      let title = '無題';
-      for (const key of Object.keys(props)) {
-        const prop = props[key];
-        if (prop?.type === 'title' && prop.title?.[0]?.plain_text) {
-          title = prop.title[0].plain_text;
-          break;
-        }
-      }
-
+    const pages = allResults.map(page => {
+      const title = extractTitle(page);
       const pageId = page.id.replace(/-/g, '');
       const url = `https://www.notion.so/${pageId}`;
-      // タイトルにキーワードが含まれるかでラベルを付ける
-      const titleMatch = title.toLowerCase().includes(kw);
-      console.log('Candidate:', title, titleMatch ? '[title-match]' : '[body-match]', url);
-      return { title, url, titleMatch };
+
+      const isPjPage = title.toLowerCase().startsWith('pj_');
+      const isTitleMatch = title.toLowerCase().includes(kw);
+
+      // スコア: pj_タイトル一致 > タイトル一致 > 本文一致
+      const score = (isPjPage ? 2 : 0) + (isTitleMatch ? 1 : 0);
+      const label = isPjPage && isTitleMatch ? '[プロジェクトページ]' : isTitleMatch ? '[タイトル一致]' : '[本文に言及あり]';
+
+      console.log('Candidate:', title, label, url);
+      return { title, url, score, label };
     });
 
-    // タイトル一致を上位に並び替え
-    pages.sort((a, b) => (b.titleMatch ? 1 : 0) - (a.titleMatch ? 1 : 0));
+    // スコア順に並び替え
+    pages.sort((a, b) => b.score - a.score);
 
-    const candidates = pages.map(p =>
-      `- ${p.title}${p.titleMatch ? ' [タイトル一致]' : ' [本文に言及あり]'}: ${p.url}`
-    );
+    const candidates = pages.map(p => `- ${p.title} ${p.label}: ${p.url}`);
 
-    return `Notion検索候補（[タイトル一致]を優先して、ユーザーの意図に最も合うページを選んで回答してください）:\n${candidates.join('\n')}`;
+    return `Notion検索候補（[プロジェクトページ]を最優先に、ユーザーの意図に最も合うページを選んで回答してください）:\n${candidates.join('\n')}`;
   } catch (error) {
     console.error('Notion search error:', error.name === 'AbortError' ? 'Timeout' : error.message);
     return '';
