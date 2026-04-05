@@ -1,3 +1,17 @@
+export async function addReaction(token, channel, timestamp, emoji) {
+  const res = await fetch('https://slack.com/api/reactions.add', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ channel, timestamp, name: emoji }),
+  });
+  const data = await res.json();
+  if (!data.ok) console.error('Slack addReaction error:', data.error);
+  return data;
+}
+
 export async function postMessage(token, channel, text, threadTs) {
   const res = await fetch('https://slack.com/api/chat.postMessage', {
     method: 'POST',

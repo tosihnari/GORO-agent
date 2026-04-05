@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from 'crypto';
 import { askClaude } from '../lib/claude.js';
-import { postMessage } from '../lib/slack.js';
+import { postMessage, addReaction } from '../lib/slack.js';
 
 export const config = {
   api: { bodyParser: false },
@@ -58,6 +58,9 @@ export default async function handler(req, res) {
   const userMessage = event.text.replace(/<@[A-Z0-9]+>/g, '').trim();
 
   try {
+    // 処理中であることをリアクションで即時通知
+    await addReaction(process.env.SLACK_BOT_TOKEN, event.channel, event.ts, 'eyes');
+
     // Claudeが意図を判断してツールを使いながら回答
     const reply = await askClaude(userMessage, event.channel);
     await postMessage(process.env.SLACK_BOT_TOKEN, event.channel, reply, event.ts);
