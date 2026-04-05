@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(bash claude/goro-agent/setup.sh)",
+      "Bash(chmod +x claude/goro-agent/setup.sh)"
+    ]
+  }
+}

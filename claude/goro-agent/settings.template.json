@@ -1,0 +1,52 @@
+{
+  "env": {
+    "FIGMA_TOKEN": "__FIGMA_API_KEY__",
+    "FIGMA_FILE_KEY": "__FIGMA_FILE_KEY__"
+  },
+  "mcpServers": {
+    "notion-goro": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@notionhq/notion-mcp-server"],
+      "env": {
+        "NOTION_TOKEN": "__NOTION_TOKEN__"
+      }
+    },
+    "figma": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "figma-developer-mcp", "--stdio"],
+      "env": {
+        "FIGMA_API_KEY": "__FIGMA_API_KEY__"
+      }
+    },
+    "slack-goro": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "__SLACK_BOT_TOKEN__"
+      }
+    },
+    "gmail-goro": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@gptscript-ai/gptscript-mcp-server-gmail"],
+      "env": {
+        "GOOGLE_CLIENT_ID": "__GOOGLE_CLIENT_ID__",
+        "GOOGLE_CLIENT_SECRET": "__GOOGLE_CLIENT_SECRET__",
+        "GOOGLE_REFRESH_TOKEN": "__GOOGLE_REFRESH_TOKEN__"
+      }
+    },
+    "gcal-goro": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@gptscript-ai/gptscript-mcp-server-google-calendar"],
+      "env": {
+        "GOOGLE_CLIENT_ID": "__GOOGLE_CLIENT_ID__",
+        "GOOGLE_CLIENT_SECRET": "__GOOGLE_CLIENT_SECRET__",
+        "GOOGLE_REFRESH_TOKEN": "__GOOGLE_REFRESH_TOKEN__"
+      }
+    }
+  }
+}

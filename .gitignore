@@ -1,3 +1,19 @@
 .DS_Store
 .claude.json
+.claude/settings.local.json
 temp.txt
+__pycache__/
+*.pyc
+
+# Claude Code シークレット（gitに入れない）
+claude/goro-agent/.env
+claude/credentials/
+
+# ローカルのみ（gitに入れない）
+projects/
+marketing/
+sales/
+hr/
+finance/
+gdrive/
+private/
