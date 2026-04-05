@@ -37,6 +37,12 @@ function isSlackRelatedQuery(message) {
   return keywords.some(kw => message.toLowerCase().includes(kw));
 }
 
+// メッセージ内のチャンネルメンション（<#C123|name>）を抽出
+function extractChannelMention(message) {
+  const match = message.match(/<#([A-Z0-9]+)\|?[^>]*>/);
+  return match ? match[1] : null;
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
@@ -72,6 +78,10 @@ export default async function handler(req, res) {
   const userMessage = event.text.replace(/<@[A-Z0-9]+>/g, '').trim();
 
   try {
+    // チャンネルメンションがあればそのチャンネル、なければ現チャンネル
+    const mentionedChannel = extractChannelMention(userMessage);
+    const targetChannel = mentionedChannel ?? event.channel;
+
     // NotionとSlack履歴を並行取得
     const [notionContext, slackMessages] = await Promise.all([
       Promise.race([
@@ -79,7 +89,7 @@ export default async function handler(req, res) {
         new Promise(resolve => setTimeout(() => resolve(''), 15000)),
       ]),
       isSlackRelatedQuery(userMessage)
-        ? getChannelHistory(process.env.SLACK_BOT_TOKEN, event.channel, 50)
+        ? getChannelHistory(process.env.SLACK_BOT_TOKEN, targetChannel, 50)
         : Promise.resolve([]),
     ]);
 
