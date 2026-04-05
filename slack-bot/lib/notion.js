@@ -21,10 +21,21 @@ async function notionFetch(path, body, timeoutMs = 15000) {
   }
 }
 
+// 日本語の助詞・動詞・質問ワードを除いてキーワードを抽出
+function extractKeyword(message) {
+  return message
+    .replace(/を教えて|について|のリンク|のページ|のNotionページ|はどこ|教えて|お願い|ください|してほしい/g, '')
+    .replace(/Notionの?|notionの?/gi, '')
+    .replace(/pj_/g, '')
+    .trim();
+}
+
 export async function searchNotion(query) {
+  const keyword = extractKeyword(query);
+  console.log('Notion search keyword:', keyword);
   try {
     const data = await notionFetch('/search', {
-      query,
+      query: keyword,
       filter: { value: 'page', property: 'object' },
       page_size: 3,
     });
