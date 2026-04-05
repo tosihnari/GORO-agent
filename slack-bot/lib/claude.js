@@ -118,7 +118,7 @@ export async function askClaude(userMessage, channelId, threadHistory = []) {
     ? [...historyMessages, { role: 'user', content: userMessage }]
     : [{ role: 'user', content: userMessage }];
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 6; i++) {
     const response = await client.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: 2048,
