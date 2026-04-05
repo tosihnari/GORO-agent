@@ -1,46 +1,49 @@
-import { Client } from '@notionhq/client';
+const NOTION_API = 'https://api.notion.com/v1';
 
-const notion = new Client({
-  auth: process.env.NOTION_TOKEN,
-  timeoutMs: 5000,
-});
+async function notionFetch(path, body, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(`${NOTION_API}${path}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.NOTION_TOKEN}`,
+        'Content-Type': 'application/json',
+        'Notion-Version': '2022-06-28',
+      },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+    return await res.json();
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 export async function searchNotion(query) {
   try {
-    const results = await notion.search({
+    const data = await notionFetch('/search', {
       query,
       filter: { value: 'page', property: 'object' },
       page_size: 3,
     });
 
-    if (results.results.length === 0) return '';
+    if (!data.results || data.results.length === 0) return '';
 
-    const summaries = await Promise.all(
-      results.results.map(async page => {
-        const title =
-          page.properties?.title?.title?.[0]?.plain_text ||
-          page.properties?.Name?.title?.[0]?.plain_text ||
-          '無題';
+    const summaries = data.results.map(page => {
+      const props = page.properties ?? {};
+      const title =
+        props.title?.title?.[0]?.plain_text ||
+        props.Name?.title?.[0]?.plain_text ||
+        props['名前']?.title?.[0]?.plain_text ||
+        '無題';
+      return `- ${title}`;
+    });
 
-        // ページの先頭ブロックを取得してコンテキストに含める
-        const blocks = await notion.blocks.children.list({
-          block_id: page.id,
-          page_size: 5,
-        });
-
-        const text = blocks.results
-          .filter(b => b.type === 'paragraph' && b.paragraph.rich_text.length > 0)
-          .map(b => b.paragraph.rich_text.map(t => t.plain_text).join(''))
-          .join(' ')
-          .slice(0, 300);
-
-        return `### ${title}\n${text}`;
-      })
-    );
-
-    return summaries.filter(Boolean).join('\n\n');
+    return `関連するNotionページ:\n${summaries.join('\n')}`;
   } catch (error) {
-    console.error('Notion search error:', error);
+    console.error('Notion search error:', error.name === 'AbortError' ? 'Timeout' : error.message);
     return '';
   }
 }
