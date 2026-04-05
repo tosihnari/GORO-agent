@@ -35,16 +35,16 @@ export default async function handler(req, res) {
   const rawBody = await getRawBody(req);
   const body = JSON.parse(rawBody);
 
+  // URL検証は署名チェックより先に処理（初回セットアップ時）
+  if (body.type === 'url_verification') {
+    return res.json({ challenge: body.challenge });
+  }
+
   const signature = req.headers['x-slack-signature'] ?? '';
   const timestamp = req.headers['x-slack-request-timestamp'] ?? '';
 
   if (!verifySignature(process.env.SLACK_SIGNING_SECRET, signature, timestamp, rawBody)) {
     return res.status(401).json({ error: 'Invalid signature' });
-  }
-
-  // Slack URL検証（初回セットアップ時）
-  if (body.type === 'url_verification') {
-    return res.json({ challenge: body.challenge });
   }
 
   if (body.type !== 'event_callback') return res.status(200).end();
