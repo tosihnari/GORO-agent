@@ -43,8 +43,9 @@ export async function searchNotion(query) {
 
     if (!data.results || data.results.length === 0) return '該当するNotionページは見つかりませんでした。';
 
-    // Claudeが意図に合うページを選べるよう、候補を全て渡す
-    const candidates = data.results.map(page => {
+    const kw = keyword.toLowerCase();
+
+    const pages = data.results.map(page => {
       const props = page.properties ?? {};
 
       let title = '無題';
@@ -58,11 +59,20 @@ export async function searchNotion(query) {
 
       const pageId = page.id.replace(/-/g, '');
       const url = `https://www.notion.so/${pageId}`;
-      console.log('Candidate:', title, url);
-      return `- ${title}: ${url}`;
+      // タイトルにキーワードが含まれるかでラベルを付ける
+      const titleMatch = title.toLowerCase().includes(kw);
+      console.log('Candidate:', title, titleMatch ? '[title-match]' : '[body-match]', url);
+      return { title, url, titleMatch };
     });
 
-    return `Notion検索候補（ユーザーの意図に最も合うものを選んで回答してください）:\n${candidates.join('\n')}`;
+    // タイトル一致を上位に並び替え
+    pages.sort((a, b) => (b.titleMatch ? 1 : 0) - (a.titleMatch ? 1 : 0));
+
+    const candidates = pages.map(p =>
+      `- ${p.title}${p.titleMatch ? ' [タイトル一致]' : ' [本文に言及あり]'}: ${p.url}`
+    );
+
+    return `Notion検索候補（[タイトル一致]を優先して、ユーザーの意図に最も合うページを選んで回答してください）:\n${candidates.join('\n')}`;
   } catch (error) {
     console.error('Notion search error:', error.name === 'AbortError' ? 'Timeout' : error.message);
     return '';
