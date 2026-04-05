@@ -66,6 +66,12 @@ export async function searchNotion(query) {
     const kw = keyword.toLowerCase();
 
     const pages = allResults.map(page => {
+      // タイトル抽出の詳細ログ
+      const propKeys = Object.keys(page.properties ?? {});
+      const titleProp = propKeys.find(k => page.properties[k]?.type === 'title');
+      const rawTitle = titleProp ? JSON.stringify(page.properties[titleProp].title) : 'NO_TITLE_PROP';
+      console.log(`[RAW] id=${page.id} child_page=${page.child_page?.title ?? 'none'} titleProp=${titleProp} raw=${rawTitle}`);
+
       const title = extractTitle(page);
       const pageId = page.id.replace(/-/g, '');
       const url = `https://www.notion.so/${pageId}`;
@@ -73,11 +79,10 @@ export async function searchNotion(query) {
       const isPjPage = title.toLowerCase().startsWith('pj_');
       const isTitleMatch = title.toLowerCase().includes(kw);
 
-      // スコア: pj_タイトル一致 > タイトル一致 > 本文一致
       const score = (isPjPage ? 2 : 0) + (isTitleMatch ? 1 : 0);
       const label = isPjPage && isTitleMatch ? '[プロジェクトページ]' : isTitleMatch ? '[タイトル一致]' : '[本文に言及あり]';
 
-      console.log('Candidate:', title, label, url);
+      console.log(`[Candidate] title="${title}" score=${score} label=${label} url=${url}`);
       return { title, url, score, label };
     });
 
