@@ -6,6 +6,24 @@ const DB_IDS = {
   // taskManagement: process.env.NOTION_TASK_DB_ID,  // 将来追加
 };
 
+async function notionGet(path, timeoutMs = 15000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(`${NOTION_API}${path}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${process.env.NOTION_TOKEN}`,
+        'Notion-Version': '2022-06-28',
+      },
+      signal: controller.signal,
+    });
+    return await res.json();
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function notionFetch(path, body, timeoutMs = 15000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -94,6 +112,71 @@ export async function queryProjectDB(keyword) {
     return summaries.join('\n\n');
   } catch (error) {
     console.error('ProjectDB query error:', error.name === 'AbortError' ? 'Timeout' : error.message);
+    return '';
+  }
+}
+
+// URLまたはIDからNotionのページIDを抽出（32文字の16進数）
+function extractPageId(urlOrId) {
+  const match = urlOrId.match(/([a-f0-9]{32})/i);
+  if (match) return match[1];
+  // ハイフン付きUUID形式
+  const uuidMatch = urlOrId.match(/([a-f0-9-]{36})/i);
+  return uuidMatch ? uuidMatch[1].replace(/-/g, '') : null;
+}
+
+// ブロックからテキストを抽出
+function blockToText(block) {
+  const type = block.type;
+  const content = block[type];
+  if (!content) return null;
+
+  const richText = content.rich_text ?? [];
+  const text = richText.map(t => t.plain_text).join('');
+
+  switch (type) {
+    case 'heading_1': return `# ${text}`;
+    case 'heading_2': return `## ${text}`;
+    case 'heading_3': return `### ${text}`;
+    case 'bulleted_list_item': return `• ${text}`;
+    case 'numbered_list_item': return `- ${text}`;
+    case 'to_do': return `[${content.checked ? 'x' : ' '}] ${text}`;
+    case 'paragraph': return text;
+    case 'child_page': return `[子ページ] ${content.title}`;
+    default: return text || null;
+  }
+}
+
+// Notionページの本文と子ページ一覧を取得
+export async function readNotionPage(urlOrId) {
+  const pageId = extractPageId(urlOrId);
+  if (!pageId) return 'ページIDを取得できませんでした。';
+
+  console.log('Reading Notion page:', pageId);
+  try {
+    const data = await notionGet(`/blocks/${pageId}/children?page_size=50`);
+    if (!data.results) return 'ページの内容を取得できませんでした。';
+
+    const lines = [];
+    const childPages = [];
+
+    for (const block of data.results) {
+      if (block.type === 'child_page') {
+        const childId = block.id.replace(/-/g, '');
+        childPages.push(`• ${block.child_page.title}: https://www.notion.so/${childId}`);
+      } else {
+        const text = blockToText(block);
+        if (text) lines.push(text);
+      }
+    }
+
+    const result = [];
+    if (lines.length > 0) result.push(lines.join('\n'));
+    if (childPages.length > 0) result.push(`\n[子ページ一覧]\n${childPages.join('\n')}`);
+
+    return result.join('\n') || 'ページの本文は空でした。';
+  } catch (error) {
+    console.error('readNotionPage error:', error.name === 'AbortError' ? 'Timeout' : error.message);
     return '';
   }
 }

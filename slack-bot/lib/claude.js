@@ -1,5 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { queryProjectDB, searchNotion } from './notion.js';
+import { queryProjectDB, searchNotion, readNotionPage } from './notion.js';
 import { getChannelHistory } from './slack.js';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -14,14 +14,15 @@ const SYSTEM_PROMPT = `あなたはGOROの社内AIアシスタントです。
 
 ## ツールの使い分け
 - 顧客名・案件名が含まれる質問（リンク・情報・ステータス・担当者など）→ まず query_project_db を使う
+- プロジェクトの概要・詳細・子ページの内容を知りたい → read_notion_page でページ本文を取得する
 - 議事録・ナレッジ・特定ページの検索 → search_notion を使う
 - Slackの会話・やり取り・まとめ → get_slack_history を使う
 - 複数の情報源が必要なら複数のツールを使う
 
-## query_project_db の結果の使い方
-- 結果にURLが含まれる → リンクを聞かれたらそのURLを回答する
-- 結果にステータス・担当者が含まれる → そのまま回答に使う
-- 「リンク教えて」「ページ教えて」「どこ？」はURLを返せばよい
+## ページ内容の読み方
+- query_project_db でURLを取得したら、詳細を聞かれた場合は read_notion_page でそのURLを読む
+- read_notion_page の結果に子ページ一覧が含まれる場合、関連する子ページも read_notion_page で読んで回答する
+- 「概要」「サービス」「ターゲット」など詳細情報はページ本文にあるため必ず read_notion_page を使う
 
 ## 回答スタイル
 - 結論ファーストで端的に
@@ -59,6 +60,20 @@ const TOOLS = [
         },
       },
       required: ['keyword'],
+    },
+  },
+  {
+    name: 'read_notion_page',
+    description: 'NotionページのURLまたはIDを指定してページの本文・子ページ一覧を取得する。プロジェクト概要・サービス内容・ターゲットなど詳細情報を調べる時に使う。',
+    input_schema: {
+      type: 'object',
+      properties: {
+        url: {
+          type: 'string',
+          description: 'NotionページのURL（例: https://www.notion.so/xxx）',
+        },
+      },
+      required: ['url'],
     },
   },
   {
@@ -131,6 +146,9 @@ export async function askClaude(userMessage, channelId, threadHistory = []) {
         if (tool.name === 'query_project_db') {
           result = await queryProjectDB(tool.input.keyword);
           if (!result) result = 'プロジェクトDBに該当する情報は見つかりませんでした。';
+        } else if (tool.name === 'read_notion_page') {
+          result = await readNotionPage(tool.input.url);
+          if (!result) result = 'ページの内容を取得できませんでした。';
         } else if (tool.name === 'search_notion') {
           result = await searchNotion(tool.input.keyword);
           if (!result) result = '該当するNotionページは見つかりませんでした。';
