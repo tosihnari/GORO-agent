@@ -1,6 +1,6 @@
 const NOTION_API = 'https://api.notion.com/v1';
 
-async function notionFetch(path, body, timeoutMs = 8000) {
+async function notionFetch(path, body, timeoutMs = 15000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
 

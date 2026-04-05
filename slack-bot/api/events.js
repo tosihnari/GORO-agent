@@ -63,10 +63,10 @@ export default async function handler(req, res) {
   const userMessage = event.text.replace(/<@[A-Z0-9]+>/g, '').trim();
 
   try {
-    // Notionは3秒以内に諦める
+    // Notionは15秒以内に諦める
     const context = await Promise.race([
       searchNotion(userMessage),
-      new Promise(resolve => setTimeout(() => resolve(''), 3000)),
+      new Promise(resolve => setTimeout(() => resolve(''), 15000)),
     ]);
 
     // Claudeに回答を生成させる
