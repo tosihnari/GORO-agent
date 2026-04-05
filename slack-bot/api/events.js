@@ -3,7 +3,6 @@ import { askClaude } from '../lib/claude.js';
 import { searchNotion } from '../lib/notion.js';
 import { postMessage } from '../lib/slack.js';
 
-// Vercelのbodyパーサーを無効化（署名検証のために生のbodyが必要）
 export const config = {
   api: { bodyParser: false },
 };
@@ -35,14 +34,14 @@ export default async function handler(req, res) {
   const rawBody = await getRawBody(req);
   const body = JSON.parse(rawBody);
 
-  // URL検証は署名チェックより先に処理（初回セットアップ時）
+  // URL検証（初回セットアップ時）
   if (body.type === 'url_verification') {
     return res.json({ challenge: body.challenge });
   }
 
+  // 署名検証
   const signature = req.headers['x-slack-signature'] ?? '';
   const timestamp = req.headers['x-slack-request-timestamp'] ?? '';
-
   if (!verifySignature(process.env.SLACK_SIGNING_SECRET, signature, timestamp, rawBody)) {
     return res.status(401).json({ error: 'Invalid signature' });
   }
@@ -51,20 +50,24 @@ export default async function handler(req, res) {
 
   const event = body.event;
 
-  // app_mention以外・Botからのメッセージは無視
+  // app_mention以外・Botからのメッセージ・リトライは無視
   if (event.type !== 'app_mention' || event.bot_id) {
     return res.status(200).end();
   }
 
-  // Slackに即座にackを返す（3秒以内に必要）
-  res.status(200).end();
+  // Slackのリトライを無視（重複処理防止）
+  if (req.headers['x-slack-retry-num']) {
+    return res.status(200).end();
+  }
 
-  // 非同期で処理
+  const userMessage = event.text.replace(/<@[A-Z0-9]+>/g, '').trim();
+
   try {
-    const userMessage = event.text.replace(/<@[A-Z0-9]+>/g, '').trim();
-
-    // Notionから関連コンテキストを取得
-    const context = await searchNotion(userMessage);
+    // Notionは3秒以内に諦める
+    const context = await Promise.race([
+      searchNotion(userMessage),
+      new Promise(resolve => setTimeout(() => resolve(''), 3000)),
+    ]);
 
     // Claudeに回答を生成させる
     const reply = await askClaude(userMessage, context);
@@ -80,4 +83,7 @@ export default async function handler(req, res) {
       event.ts,
     );
   }
+
+  // 全処理完了後に200を返す
+  return res.status(200).end();
 }
