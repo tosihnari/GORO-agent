@@ -29,15 +29,25 @@ export async function searchNotion(query) {
       page_size: 3,
     });
 
+    console.log('Notion search results count:', data.results?.length ?? 0);
+
     if (!data.results || data.results.length === 0) return '';
 
     const summaries = data.results.map(page => {
       const props = page.properties ?? {};
-      const title =
-        props.title?.title?.[0]?.plain_text ||
-        props.Name?.title?.[0]?.plain_text ||
-        props['名前']?.title?.[0]?.plain_text ||
-        '無題';
+      const propKeys = Object.keys(props);
+      console.log('Page prop keys:', propKeys);
+
+      // タイトルプロパティを動的に探す
+      let title = '無題';
+      for (const key of propKeys) {
+        const prop = props[key];
+        if (prop?.type === 'title' && prop.title?.[0]?.plain_text) {
+          title = prop.title[0].plain_text;
+          break;
+        }
+      }
+      console.log('Found title:', title);
       return `- ${title}`;
     });
 
