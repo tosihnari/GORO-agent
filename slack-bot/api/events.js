@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from 'crypto';
 import { askClaude } from '../lib/claude.js';
 import { searchNotion } from '../lib/notion.js';
-import { postMessage } from '../lib/slack.js';
+import { postMessage, getChannelHistory } from '../lib/slack.js';
 
 export const config = {
   api: { bodyParser: false },
@@ -26,6 +26,15 @@ function verifySignature(signingSecret, signature, timestamp, rawBody) {
   } catch {
     return false;
   }
+}
+
+// Slackに関する質問かどうかを判定
+function isSlackRelatedQuery(message) {
+  const keywords = [
+    'slack', 'スラック', 'メッセージ', 'チャンネル', '会話', 'やり取り',
+    '返信', '未読', '要約', 'まとめ', '最近', '連絡', 'ログ',
+  ];
+  return keywords.some(kw => message.toLowerCase().includes(kw));
 }
 
 export default async function handler(req, res) {
@@ -63,11 +72,28 @@ export default async function handler(req, res) {
   const userMessage = event.text.replace(/<@[A-Z0-9]+>/g, '').trim();
 
   try {
-    // Notionは15秒以内に諦める
-    const context = await Promise.race([
-      searchNotion(userMessage),
-      new Promise(resolve => setTimeout(() => resolve(''), 15000)),
+    // NotionとSlack履歴を並行取得
+    const [notionContext, slackMessages] = await Promise.all([
+      Promise.race([
+        searchNotion(userMessage),
+        new Promise(resolve => setTimeout(() => resolve(''), 15000)),
+      ]),
+      isSlackRelatedQuery(userMessage)
+        ? getChannelHistory(process.env.SLACK_BOT_TOKEN, event.channel, 50)
+        : Promise.resolve([]),
     ]);
+
+    // Slackの履歴をテキスト化
+    let slackContext = '';
+    if (slackMessages.length > 0) {
+      const lines = slackMessages
+        .filter(m => m.text && !m.bot_id)
+        .map(m => `[${new Date(Number(m.ts) * 1000).toLocaleString('ja-JP')}] ${m.text}`)
+        .reverse();
+      slackContext = `## このチャンネルの最近のメッセージ（最新50件）\n${lines.join('\n')}`;
+    }
+
+    const context = [notionContext, slackContext].filter(Boolean).join('\n\n');
 
     // Claudeに回答を生成させる
     const reply = await askClaude(userMessage, context);

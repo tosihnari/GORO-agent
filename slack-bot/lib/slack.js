@@ -16,3 +16,27 @@ export async function postMessage(token, channel, text, threadTs) {
   if (!data.ok) console.error('Slack postMessage error:', data.error);
   return data;
 }
+
+export async function getChannelHistory(token, channel, limit = 30) {
+  const params = new URLSearchParams({ channel, limit });
+  const res = await fetch(`https://slack.com/api/conversations.history?${params}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  const data = await res.json();
+  if (!data.ok) {
+    console.error('Slack history error:', data.error);
+    return [];
+  }
+  return data.messages ?? [];
+}
+
+export async function getUserInfo(token, userId) {
+  const params = new URLSearchParams({ user: userId });
+  const res = await fetch(`https://slack.com/api/users.info?${params}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  const data = await res.json();
+  return data.user?.profile?.display_name || data.user?.real_name || userId;
+}
