@@ -21,12 +21,11 @@ async function notionFetch(path, body, timeoutMs = 15000) {
   }
 }
 
-// 日本語の助詞・動詞・質問ワードを除いてキーワードを抽出
+// 日本語の助詞・質問ワードのみ除去（pj_ などのプレフィックスは保持）
 function extractKeyword(message) {
   return message
     .replace(/を教えて|について|のリンク|のページ|のNotionページ|はどこ|教えて|お願い|ください|してほしい/g, '')
     .replace(/Notionの?|notionの?/gi, '')
-    .replace(/pj_/g, '')
     .trim();
 }
 
@@ -37,19 +36,19 @@ export async function searchNotion(query) {
     const data = await notionFetch('/search', {
       query: keyword,
       filter: { value: 'page', property: 'object' },
-      page_size: 3,
+      page_size: 8,
     });
 
     console.log('Notion search results count:', data.results?.length ?? 0);
 
-    if (!data.results || data.results.length === 0) return '';
+    if (!data.results || data.results.length === 0) return '該当するNotionページは見つかりませんでした。';
 
-    const summaries = data.results.map(page => {
+    // Claudeが意図に合うページを選べるよう、候補を全て渡す
+    const candidates = data.results.map(page => {
       const props = page.properties ?? {};
-      const propKeys = Object.keys(props);
 
       let title = '無題';
-      for (const key of propKeys) {
+      for (const key of Object.keys(props)) {
         const prop = props[key];
         if (prop?.type === 'title' && prop.title?.[0]?.plain_text) {
           title = prop.title[0].plain_text;
@@ -57,14 +56,13 @@ export async function searchNotion(query) {
         }
       }
 
-      // NotionページのURL（IDのハイフンを除去）
       const pageId = page.id.replace(/-/g, '');
       const url = `https://www.notion.so/${pageId}`;
-      console.log('Found title:', title, 'URL:', url);
+      console.log('Candidate:', title, url);
       return `- ${title}: ${url}`;
     });
 
-    return `関連するNotionページ:\n${summaries.join('\n')}`;
+    return `Notion検索候補（ユーザーの意図に最も合うものを選んで回答してください）:\n${candidates.join('\n')}`;
   } catch (error) {
     console.error('Notion search error:', error.name === 'AbortError' ? 'Timeout' : error.message);
     return '';
