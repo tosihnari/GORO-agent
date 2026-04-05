@@ -79,7 +79,8 @@ export async function searchNotion(query) {
       const isPjPage = title.toLowerCase().startsWith('pj_');
       const isTitleMatch = title.toLowerCase().includes(kw);
 
-      const score = (isPjPage ? 2 : 0) + (isTitleMatch ? 1 : 0);
+      // pj_はタイトルに検索語も含む場合のみ加点（無関係なpj_ページを上位にしない）
+      const score = (isPjPage && isTitleMatch) ? 3 : isTitleMatch ? 1 : 0;
       const label = isPjPage && isTitleMatch ? '[プロジェクトページ]' : isTitleMatch ? '[タイトル一致]' : '[本文に言及あり]';
 
       console.log(`[Candidate] title="${title}" score=${score} label=${label} url=${url}`);
