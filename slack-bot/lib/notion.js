@@ -75,7 +75,7 @@ export async function queryProjectDB(keyword) {
       const pageId = page.id.replace(/-/g, '');
       const url = `https://www.notion.so/${pageId}`;
 
-      const lines = [`*${title}*`, `URL: ${url}`];
+      const lines = [title, url];
       const fieldMap = {
         'ステータス': 'ステータス',
         '事業カテゴリ': '事業カテゴリ',
@@ -86,12 +86,12 @@ export async function queryProjectDB(keyword) {
       };
       for (const [propName, label] of Object.entries(fieldMap)) {
         const val = getPropText(props[propName]);
-        if (val) lines.push(`• ${label}: ${val}`);
+        if (val) lines.push(`• ${label}：${val}`);
       }
       return lines.join('\n');
     });
 
-    return summaries.join('\n\n---\n\n');
+    return summaries.join('\n\n');
   } catch (error) {
     console.error('ProjectDB query error:', error.name === 'AbortError' ? 'Timeout' : error.message);
     return '';
