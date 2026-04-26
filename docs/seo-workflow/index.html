@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEOライティング ワークフロー | GORO</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, 'Hiragino Sans', 'Yu Gothic', sans-serif;
+      background: #faf9f6;
+      color: #2d3748;
+      line-height: 1.75;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .nav-inner {
+      max-width: 900px; margin: 0 auto;
+      padding: 0 24px; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-size: 14px; font-weight: 700; letter-spacing: .04em; color: #1a202c; }
+    .nav-badge {
+      font-size: 11px; font-weight: 600; letter-spacing: .06em;
+      background: #ebf8f0; color: #276749; border: 1px solid #9ae6b4;
+      padding: 3px 10px; border-radius: 20px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 120px 24px 60px;
+      text-align: center;
+      background: linear-gradient(160deg, #f0fff4 0%, #faf9f6 60%);
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: #276749; background: #ebf8f0; border: 1px solid #9ae6b4;
+      padding: 4px 12px; border-radius: 20px; margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 800; letter-spacing: -.02em; line-height: 1.2;
+      color: #1a202c; margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 16px; color: #718096; max-width: 520px; margin: 0 auto 36px;
+    }
+    .hero-meta {
+      display: flex; align-items: center; justify-content: center; gap: 24px;
+      font-size: 13px; color: #a0aec0;
+    }
+    .hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+    /* ── Main layout ── */
+    main { max-width: 900px; margin: 0 auto; padding: 0 24px 100px; }
+
+    /* ── Section ── */
+    section { margin-top: 64px; }
+    .section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: #48bb78; margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 22px; font-weight: 700; color: #1a202c; margin-bottom: 24px;
+      padding-bottom: 12px; border-bottom: 2px solid #e2e8f0;
+    }
+
+    /* ── How to use ── */
+    .usage-box {
+      background: #1a202c; color: #e2e8f0;
+      border-radius: 12px; padding: 24px 28px; margin-bottom: 20px;
+    }
+    .usage-box .label {
+      font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      color: #68d391; margin-bottom: 8px;
+    }
+    .usage-box code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 18px; color: #fff;
+    }
+    .trigger-list {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;
+    }
+    .trigger-chip {
+      font-size: 12px; background: #2d3748; color: #a0aec0;
+      border: 1px solid #4a5568; border-radius: 6px; padding: 4px 10px;
+    }
+
+    /* ── Phases ── */
+    .phase-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;
+    }
+    .phase-card {
+      background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+      padding: 20px; position: relative; overflow: hidden;
+    }
+    .phase-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .phase-card.p1::before { background: #68d391; }
+    .phase-card.p2::before { background: #63b3ed; }
+    .phase-card.p3::before { background: #b794f4; }
+    .phase-card.p4::before { background: #fc8181; }
+
+    .phase-num {
+      font-size: 11px; font-weight: 700; letter-spacing: .06em;
+      margin-bottom: 6px;
+    }
+    .phase-card.p1 .phase-num { color: #276749; }
+    .phase-card.p2 .phase-num { color: #2b6cb0; }
+    .phase-card.p3 .phase-num { color: #553c9a; }
+    .phase-card.p4 .phase-num { color: #c53030; }
+
+    .phase-name { font-size: 15px; font-weight: 700; color: #1a202c; margin-bottom: 10px; }
+    .phase-steps { list-style: none; }
+    .phase-steps li {
+      font-size: 13px; color: #4a5568; padding: 3px 0;
+      display: flex; align-items: flex-start; gap: 6px;
+    }
+    .phase-steps li::before { content: '→'; color: #a0aec0; flex-shrink: 0; margin-top: 1px; }
+    .phase-confirm {
+      margin-top: 10px; padding-top: 10px; border-top: 1px solid #f0f0f0;
+      font-size: 12px; color: #68d391; font-weight: 600;
+    }
+
+    /* ── Steps accordion ── */
+    .step-list { display: flex; flex-direction: column; gap: 12px; }
+    .step-item {
+      background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;
+    }
+    .step-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px; cursor: pointer;
+      transition: background .15s;
+    }
+    .step-header:hover { background: #f7fafc; }
+    .step-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #ebf8f0; color: #276749;
+      font-size: 12px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-title { font-size: 15px; font-weight: 700; color: #1a202c; flex: 1; }
+    .step-tag {
+      font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;
+    }
+    .step-tag.research { background: #ebf8f0; color: #276749; }
+    .step-tag.planning { background: #ebf4ff; color: #2b6cb0; }
+    .step-tag.writing  { background: #faf5ff; color: #553c9a; }
+    .step-tag.quality  { background: #fff5f5; color: #c53030; }
+    .step-arrow { font-size: 12px; color: #a0aec0; transition: transform .2s; }
+    .step-item.open .step-arrow { transform: rotate(180deg); }
+
+    .step-body {
+      display: none; padding: 0 20px 20px; border-top: 1px solid #f0f0f0;
+    }
+    .step-item.open .step-body { display: block; }
+
+    /* ── Tables ── */
+    .md-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+    .md-table th {
+      background: #f7fafc; color: #4a5568;
+      font-weight: 700; font-size: 11px; letter-spacing: .04em;
+      padding: 8px 12px; text-align: left; border-bottom: 2px solid #e2e8f0;
+    }
+    .md-table td { padding: 8px 12px; border-bottom: 1px solid #f0f0f0; color: #4a5568; }
+    .md-table tr:last-child td { border-bottom: none; }
+
+    /* ── Blockquote ── */
+    .purpose {
+      border-left: 3px solid #68d391; padding: 10px 16px;
+      background: #f0fff4; border-radius: 0 8px 8px 0;
+      font-size: 13px; color: #276749; margin-top: 16px;
+    }
+
+    /* ── Principles ── */
+    .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 4px; }
+    .principle-card {
+      background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;
+    }
+    .principle-card h4 { font-size: 13px; font-weight: 700; color: #1a202c; margin-bottom: 6px; }
+    .principle-card p { font-size: 12px; color: #718096; line-height: 1.6; }
+
+    /* ── Output structure ── */
+    .file-tree {
+      background: #1a202c; color: #a0aec0;
+      border-radius: 10px; padding: 20px 24px;
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; line-height: 2;
+      margin-top: 12px;
+    }
+    .file-tree .dir { color: #68d391; font-weight: 600; }
+    .file-tree .file { color: #e2e8f0; }
+    .file-tree .comment { color: #4a5568; }
+
+    /* ── Quality grid ── */
+    .quality-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .quality-card {
+      background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;
+    }
+    .quality-card .q-num {
+      font-size: 10px; font-weight: 700; color: #a0aec0; letter-spacing: .06em; margin-bottom: 4px;
+    }
+    .quality-card h4 { font-size: 14px; font-weight: 700; color: #1a202c; margin-bottom: 6px; }
+    .quality-card p { font-size: 12px; color: #718096; line-height: 1.6; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center; padding: 40px 24px;
+      font-size: 12px; color: #a0aec0;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .phase-grid { grid-template-columns: 1fr 1fr; }
+      .hero h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">GORO</span>
+    <span class="nav-badge">SEO Workflow</span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-tag">Claude Code × SEO</div>
+  <h1>SEOライティング<br>ワークフロー</h1>
+  <p>キーワードを渡すだけで、リサーチ〜原稿まで一気通貫で仕上げる Claude Code ワークフロー</p>
+  <div class="hero-meta">
+    <span>📋 8 STEP</span>
+    <span>📁 4 PHASE</span>
+    <span>✅ 8つの品質基準</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- 使い方 -->
+  <section>
+    <div class="section-label">HOW TO USE</div>
+    <div class="section-title">使い方</div>
+
+    <div class="usage-box">
+      <div class="label">CLAUDE CODE にタイプする</div>
+      <code>/seo-article</code>
+    </div>
+
+    <p style="font-size:14px;color:#718096;margin-bottom:12px;">以下のような指示でも自動的に発動します：</p>
+    <div class="trigger-list">
+      <span class="trigger-chip">「〇〇のキーワードで記事を作りたい」</span>
+      <span class="trigger-chip">「SEO記事の構成を作って」</span>
+      <span class="trigger-chip">「KWで上位表示したい」</span>
+      <span class="trigger-chip">「この記事を書きたい」</span>
+      <span class="trigger-chip">「〇〇で記事を書いて」</span>
+    </div>
+  </section>
+
+  <!-- フェーズ概要 -->
+  <section>
+    <div class="section-label">FLOW</div>
+    <div class="section-title">4つのフェーズ</div>
+    <p style="font-size:14px;color:#718096;margin-bottom:20px;">各フェーズ終了後に確認を取り、承認を得てから次フェーズへ進みます。</p>
+
+    <div class="phase-grid">
+      <div class="phase-card p1">
+        <div class="phase-num">PHASE 1</div>
+        <div class="phase-name">リサーチ</div>
+        <ul class="phase-steps">
+          <li>STEP 1 キーワード理解</li>
+          <li>STEP 2 ペルソナ設定</li>
+          <li>STEP 3 競合調査</li>
+        </ul>
+        <div class="phase-confirm">✓ 確認 → 承認後に次へ</div>
+      </div>
+
+      <div class="phase-card p2">
+        <div class="phase-num">PHASE 2</div>
+        <div class="phase-name">企画設計</div>
+        <ul class="phase-steps">
+          <li>STEP 4 網羅性の確保</li>
+          <li>STEP 5 メッセージ設計</li>
+        </ul>
+        <div class="phase-confirm">✓ 確認 → 承認後に次へ</div>
+      </div>
+
+      <div class="phase-card p3">
+        <div class="phase-num">PHASE 3</div>
+        <div class="phase-name">構成・導入文</div>
+        <ul class="phase-steps">
+          <li>STEP 6 見出し構成（H1〜H3）</li>
+          <li>STEP 7 導入文設計</li>
+        </ul>
+        <div class="phase-confirm">✓ 確認 → 承認後に次へ</div>
+      </div>
+
+      <div class="phase-card p4">
+        <div class="phase-num">PHASE 4</div>
+        <div class="phase-name">ファイル生成・執筆</div>
+        <ul class="phase-steps">
+          <li>企画概要.md 生成</li>
+          <li>原稿.md 執筆</li>
+          <li>品質チェック（STEP 8）</li>
+        </ul>
+        <div class="phase-confirm" style="color:#fc8181;">→ 完成・納品</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 出力ファイル -->
+  <section>
+    <div class="section-label">OUTPUT</div>
+    <div class="section-title">出力ファイル構造</div>
+    <div class="file-tree">
+      <span class="dir">marketing/seo-media/{KW}/</span><br>
+      <span class="comment">├──</span> <span class="file">企画概要.md</span>  <span class="comment"># Phase 1〜3の成果物まとめ</span><br>
+      <span class="comment">└──</span> <span class="file">原稿.md</span>      <span class="comment"># 本文（見出し構成に沿って執筆）</span>
+    </div>
+  </section>
+
+  <!-- 基本原則 -->
+  <section>
+    <div class="section-label">PRINCIPLES</div>
+    <div class="section-title">基本原則</div>
+    <div class="principles">
+      <div class="principle-card">
+        <h4>アンサーファースト</h4>
+        <p>結論を最初に示す。読者が「答えがここにある」と瞬時に判断できる構成を優先する。</p>
+      </div>
+      <div class="principle-card">
+        <h4>検索意図への忠実性</h4>
+        <p>タイトル〜本文〜CTAまで、検索意図から外れない一貫した設計をする。</p>
+      </div>
+      <div class="principle-card">
+        <h4>検索カニバリ防止</h4>
+        <p>同サイト内の類似記事を確認。意図が被るなら既存記事の拡充を優先する。</p>
+      </div>
+      <div class="principle-card">
+        <h4>独自性の確立</h4>
+        <p>競合が提供していない視点・情報・深度を必ず1つ以上盛り込む。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ステップ詳細 -->
+  <section>
+    <div class="section-label">FRAMEWORK</div>
+    <div class="section-title">各STEPの詳細</div>
+
+    <div class="step-list">
+
+      <!-- STEP 1 -->
+      <div class="step-item">
+        <div class="step-header" onclick="toggle(this)">
+          <div class="step-num">1</div>
+          <div class="step-title">キーワード理解（周辺KWの網羅）</div>
+          <span class="step-tag research">リサーチ</span>
+          <span class="step-arrow">▼</span>
+        </div>
+        <div class="step-body">
+          <p style="font-size:13px;color:#4a5568;margin-bottom:12px;">検索KWを受け取ったら以下を洗い出す。</p>
+          <ol style="font-size:13px;color:#4a5568;padding-left:20px;line-height:2;">
+            <li>メインKWの<strong>検索意図を分類</strong>する（Know / How to / Buy / Go）</li>
+            <li><strong>関連KW・サジェスト・共起語</strong>を展開し、ユーザーが気になるテーマを列挙する</li>
+            <li>周辺KWから<strong>見出しMUST/WANTを仮設定</strong>する</li>
+          </ol>
+          <div class="purpose">目的：網羅性の確保。記事が「そのKWを検索した人のあらゆる疑問に答えられる」状態を目指す</div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-item">
+        <div class="step-header" onclick="toggle(this)">
+          <div class="step-num">2</div>
+          <div class="step-title">ペルソナ設定</div>
+          <span class="step-tag research">リサーチ</span>
+          <span class="step-arrow">▼</span>
+        </div>
+        <div class="step-body">
+          <p style="font-size:13px;color:#4a5568;margin-bottom:12px;">1人の具体的な人物像を定義する。複数パターンが想定される場合は2〜3パターン設定し、<strong>必ず優先順位をつける</strong>。</p>
+          <table class="md-table">
+            <tr><th>項目</th><th>内容</th></tr>
+            <tr><td>名前（仮名）</td><td></td></tr>
+            <tr><td>年齢・性別</td><td></td></tr>
+            <tr><td>業界と職種</td><td></td></tr>
+            <tr><td>雇用形態・立場</td><td></td></tr>
+            <tr><td>知識レベル</td><td>初心者 / 中級者 / 上級者</td></tr>
+            <tr><td>検索のタイミング</td><td>ユーザージャーニーのどのフェーズか</td></tr>
+          </table>
+          <div class="purpose">
+            <strong>インテンション</strong>：ペルソナが「知りたいこと」「感じているハードル・不安」—— 最重要の悩みを1文で言語化<br><br>
+            <strong>インサイト</strong>：なぜそれを知りたいのか？表面的な検索意図の奥にある動機を言語化
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step-item">
+        <div class="step-header" onclick="toggle(this)">
+          <div class="step-num">3</div>
+          <div class="step-title">競合調査（勝ち筋の特定）</div>
+          <span class="step-tag research">リサーチ</span>
+          <span class="step-arrow">▼</span>
+        </div>
+        <div class="step-body">
+          <p style="font-size:13px;color:#4a5568;margin-bottom:12px;">上位3〜5記事を分析し、競合マップと弱点分析を作成する。</p>
+          <table class="md-table">
+            <tr><th>項目</th><th>競合1</th><th>競合2</th><th>競合3</th></tr>
+            <tr><td>順位</td><td></td><td></td><td></td></tr>
+            <tr><td>タイトル・H1</td><td></td><td></td><td></td></tr>
+            <tr><td>H2（主要見出し）</td><td></td><td></td><td></td></tr>
+            <tr><td>文字数（概算）</td><td></td><td></td><td></td></tr>
+          </table>
+          <div class="purpose">目的：競合に勝つために、どこに独自性を発揮するかを明確にする</div>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="step-item">
+        <div class="step-header" onclick="toggle(this)">
+          <div class="step-num">4</div>
+          <div class="step-title">網羅性の確保</div>
+          <span class="step-tag planning">企画</span>
+          <span class="step-arrow">▼</span>
+        </div>
+        <div class="step-body">
+          <p style="font-size:13px;color:#4a5568;margin-bottom:12px;"><strong>定量調査</strong>：サジェスト・共起語・People Also Askを活用し「入れるべきテーマ」を漏れなく洗い出す。<br>
+          <strong>定性調査</strong>（必要に応じて）：Q&Aサイトやインタビューで定量で拾えないニーズを補完。</p>
+          <table class="md-table">
+            <tr><th>種別</th><th>説明</th></tr>
+            <tr><td><strong>見出しMUST</strong></td><td>検索意図・インテンション・定量調査から導出。必ず見出しに入れる</td></tr>
+            <tr><td><strong>見出しWANT</strong></td><td>インサイト・定性調査・独自性から導出。できれば入れたい</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- STEP 5 -->
+      <div class="step-item">
+        <div class="step-header" onclick="toggle(this)">
+          <div class="step-num">5</div>
+          <div class="step-title">メッセージ・一貫性の設計</div>
+          <span class="step-tag planning">企画</span>
+          <span class="step-arrow">▼</span>
+        </div>
+        <div class="step-body">
+          <table class="md-table">
+            <tr><th>項目</th><th>内容</th></tr>
+            <tr>
+              <td><strong>メインメッセージ</strong></td>
+              <td>「〇〇というユーザーに〇〇というキッカケを提供する」の形式で記事を一言で表す</td>
+            </tr>
+            <tr>
+              <td><strong>紹介フロー</strong></td>
+              <td>どのサービス・会社を、どんな流れで紹介するか</td>
+            </tr>
+            <tr>
+              <td><strong>インサイトと強みの結節点</strong></td>
+              <td>ユーザーのインサイト × サービスの強み の交点。どの強みをどう訴求してどこへ誘導するか</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- STEP 6 -->
+      <div class="step-item">
+        <div class="step-header" onclick="toggle(this)">
+          <div class="step-num">6</div>
+          <div class="step-title">見出し構成の設計（H1〜H3）</div>
+          <span class="step-tag writing">ライティング</span>
+          <span class="step-arrow">▼</span>
+        </div>
+        <div class="step-body">
+          <table class="md-table">
+            <tr><th>見出し</th><th>設計方針</th></tr>
+            <tr><td><strong>H1（タイトル）</strong></td><td>KWを含め、ユーザーの検索意図に直接応える形で</td></tr>
+            <tr><td><strong>H2（大見出し）</strong></td><td>MUSTテーマを軸に設計。論理的な流れで並べる</td></tr>
+            <tr><td><strong>H3（中見出し）</strong></td><td>各H2を詳細化。ユーザーの「?」を「!」に変える単位</td></tr>
+          </table>
+          <div class="purpose">
+            <strong>アンサーファースト構成の原則：</strong><br>
+            記事冒頭でメインKWへの答えを先出し（BLUF）。<br>
+            結論 → 理由・根拠 → 詳細 → 応用 の流れを意識する。
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 7 -->
+      <div class="step-item">
+        <div class="step-header" onclick="toggle(this)">
+          <div class="step-num">7</div>
+          <div class="step-title">導入文（ファーストビュー）の設計</div>
+          <span class="step-tag writing">ライティング</span>
+          <span class="step-arrow">▼</span>
+        </div>
+        <div class="step-body">
+          <p style="font-size:12px;color:#e53e3e;background:#fff5f5;padding:8px 12px;border-radius:6px;margin-bottom:12px;">⚠ 導入文作成前に必ずインテンションとインサイトを設定すること</p>
+          <table class="md-table">
+            <tr><th>#</th><th>役割</th><th>要素</th><th>接続詞</th></tr>
+            <tr><td>1</td><td>共感</td><td>問題提起</td><td>—</td></tr>
+            <tr><td>2</td><td>興味</td><td>解決策の提示（アンサーファースト）</td><td>じつは / そこで</td></tr>
+            <tr><td>3</td><td>注意喚起</td><td>インサイトの喚起</td><td>ただし</td></tr>
+            <tr><td>4</td><td>期待</td><td>解決策が有効な理由</td><td>なぜなら</td></tr>
+            <tr><td>5</td><td>目的意識</td><td>ゴールの提示</td><td>〜なら〜を選びましょう</td></tr>
+            <tr><td>6</td><td>把握</td><td>コンテンツの要約</td><td>ここでは</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- STEP 8 -->
+      <div class="step-item">
+        <div class="step-header" onclick="toggle(this)">
+          <div class="step-num">8</div>
+          <div class="step-title">品質チェック（8つの基準）</div>
+          <span class="step-tag quality">品質</span>
+          <span class="step-arrow">▼</span>
+        </div>
+        <div class="step-body">
+          <div class="quality-grid" style="margin-top:8px;">
+            <div class="quality-card">
+              <div class="q-num">CHECK 01</div>
+              <h4>網羅性</h4>
+              <p>ペルソナのニーズを定量・定性の両面で網羅できているか</p>
+            </div>
+            <div class="quality-card">
+              <div class="q-num">CHECK 02</div>
+              <h4>一貫性</h4>
+              <p>タイトル〜CTA のストーリーが一貫し、読者の「?」→「!」が成立しているか</p>
+            </div>
+            <div class="quality-card">
+              <div class="q-num">CHECK 03</div>
+              <h4>助動性（背中押し）</h4>
+              <p>次のアクションへの背中押しができているか。CTAの位置・数は適切か</p>
+            </div>
+            <div class="quality-card">
+              <div class="q-num">CHECK 04</div>
+              <h4>信頼性</h4>
+              <p>データは適切か。記事ならではの専門性が実現できているか</p>
+            </div>
+            <div class="quality-card">
+              <div class="q-num">CHECK 05</div>
+              <h4>可読性</h4>
+              <p>ペルソナの知識レベルに合った難易度・文字量・図版か</p>
+            </div>
+            <div class="quality-card">
+              <div class="q-num">CHECK 06</div>
+              <h4>独自性</h4>
+              <p>競合では得られない独自情報を盛り込み、インサイトへの訴求に機能しているか</p>
+            </div>
+            <div class="quality-card">
+              <div class="q-num">CHECK 07</div>
+              <h4>最新性</h4>
+              <p>制度・キャンペーン・サービス内容などの情報は最新か</p>
+            </div>
+            <div class="quality-card">
+              <div class="q-num">CHECK 08</div>
+              <h4>時事性</h4>
+              <p>関連するトレンド・ニュースを適切なボリュームで盛り込んでいるか</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /step-list -->
+  </section>
+
+</main>
+
+<footer>
+  <p>GORO SEO Workflow — Claude Code × seo-writing skill</p>
+</footer>
+
+<script>
+  function toggle(header) {
+    const item = header.parentElement;
+    item.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
