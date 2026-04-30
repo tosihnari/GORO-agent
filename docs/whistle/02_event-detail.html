@@ -18,10 +18,17 @@
   <style>
     body {
       font-family: 'Noto Sans JP', sans-serif;
-      background: #f7f8fa;
+      background: #e8e8e8;
       margin: 0;
-      padding-bottom: 88px;
       color: var(--color-primitive-gray-1200, #1a1a1a);
+    }
+
+    .page-wrapper {
+      max-width: 400px;
+      margin: 0 auto;
+      background: #f7f8fa;
+      min-height: 100vh;
+      padding-bottom: 88px;
     }
 
     /* ── ナビバー ── */
@@ -387,8 +394,10 @@
     .fixed-footer {
       position: fixed;
       bottom: 0;
-      left: 0;
-      right: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 400px;
       background: #fff;
       border-top: 1px solid var(--color-primitive-gray-200, #e0e0e0);
       padding: 12px 16px;
@@ -419,6 +428,7 @@
   </style>
 </head>
 <body>
+<div class="page-wrapper">
 
   <!-- ナビバー -->
   <div class="nav-bar">
@@ -749,6 +759,8 @@
 
     </div>
   </div>
+
+</div><!-- /.page-wrapper -->
 
   <!-- 固定フッター -->
   <div class="fixed-footer">
