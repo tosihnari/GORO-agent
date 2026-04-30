@@ -414,6 +414,15 @@
     /* chip-labelのアイコン非表示 */
     .chip-no-icon .dads-chip-label__icon { display: none; }
 
+    /* ボタンをモノクロに統一（CSS変数上書き） */
+    .dads-button {
+      --button-color: #1a1a1a;
+      --button-hover-color: #333;
+      --button-active-color: #000;
+      --button-outline-hover-bg-color: #f0f0f0;
+      --button-outline-active-bg-color: #e0e0e0;
+    }
+
     /* chip-label 全色をモノクロに統一 */
     .dads-chip-label[data-style="fill"] {
       background: #1a1a1a !important;
