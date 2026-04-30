@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>イベント詳細</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/global.css">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/components/chip-label/chip-label.css">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/components/button/button.css">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/components/breadcrumb/breadcrumb.css">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/components/accordion/accordion.css">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/components/description-list/description-list.css">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/components/heading/heading.css">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/components/divider/divider.css">
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #f7f8fa;
+      margin: 0;
+      padding-bottom: 88px;
+      color: var(--color-primitive-gray-1200, #1a1a1a);
+    }
+
+    /* ── ナビバー ── */
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--color-primitive-gray-200, #e0e0e0);
+    }
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      color: var(--color-primitive-blue-700, #264af4);
+      text-decoration: none;
+    }
+    .nav-back svg { flex-shrink: 0; }
+    .nav-bookmark {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--color-primitive-gray-600, #777);
+      padding: 4px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* ── ヒーロー写真 ── */
+    .hero {
+      background: #b8e6c8;
+      height: 220px;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      padding: 12px 16px;
+    }
+    .hero__overlay {
+      display: flex;
+      gap: 6px;
+    }
+
+    /* ── セクション共通 ── */
+    .section {
+      background: #fff;
+      padding: 20px 16px;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-primitive-gray-1200, #1a1a1a);
+      margin: 0 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--color-primitive-blue-700, #264af4);
+      display: inline-block;
+    }
+
+    /* ── 基本情報セクション ── */
+    .event-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 10px;
+      line-height: 1.4;
+    }
+    .event-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .urgency-bar {
+      background: var(--color-primitive-red-50, #fff0f0);
+      border: 1px solid var(--color-primitive-red-200, #ffb3b3);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .urgency-bar__slots {
+      font-size: 13px;
+      font-weight: 700;
+      color: #c00;
+    }
+    .urgency-bar__participants {
+      font-size: 13px;
+      color: var(--color-primitive-gray-700, #555);
+      margin-left: auto;
+    }
+
+    /* 基本情報テーブル */
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .info-table tr {
+      border-bottom: 1px solid var(--color-primitive-gray-100, #f0f0f0);
+    }
+    .info-table tr:last-child { border-bottom: none; }
+    .info-table th {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-primitive-gray-700, #555);
+      text-align: left;
+      padding: 10px 8px 10px 0;
+      width: 80px;
+      vertical-align: top;
+    }
+    .info-table td {
+      font-size: 14px;
+      color: var(--color-primitive-gray-1200, #1a1a1a);
+      padding: 10px 0;
+    }
+    .fee-amount {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-primitive-blue-700, #264af4);
+    }
+    .fee-note {
+      font-size: 12px;
+      color: var(--color-primitive-gray-700, #555);
+      margin-left: 4px;
+    }
+
+    /* ── イベント内容 ── */
+    .event-description {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--color-primitive-gray-900, #333);
+      margin: 0;
+    }
+
+    /* ── 当日の流れ ── */
+    .timeline {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .timeline__item {
+      display: flex;
+      gap: 12px;
+      position: relative;
+    }
+    .timeline__item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 28px;
+      bottom: -8px;
+      width: 2px;
+      background: var(--color-primitive-blue-100, #d9e6ff);
+    }
+    .timeline__dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-primitive-blue-700, #264af4);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .timeline__body {
+      padding: 4px 0 20px;
+    }
+    .timeline__title {
+      font-size: 14px;
+      font-weight: 700;
+      margin: 0 0 2px;
+    }
+    .timeline__desc {
+      font-size: 12px;
+      color: var(--color-primitive-gray-700, #555);
+      margin: 0;
+    }
+
+    /* ── 持ち物・設備 ── */
+    .items-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .items-group {}
+    .items-group__label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-primitive-gray-700, #555);
+      margin: 0 0 4px;
+    }
+    .items-group__value {
+      font-size: 13px;
+      color: var(--color-primitive-gray-1200, #1a1a1a);
+      margin: 0;
+    }
+    .items-group__badge {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: var(--color-primitive-green-50, #e6f7ed);
+      color: #0d7a3e;
+    }
+    .items-group__badge--no {
+      background: var(--color-primitive-gray-100, #f0f0f0);
+      color: var(--color-primitive-gray-700, #555);
+    }
+
+    /* ── 参加者情報 ── */
+    .participant-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      text-align: center;
+    }
+    .stat-item {}
+    .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-primitive-blue-700, #264af4);
+      display: block;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--color-primitive-gray-700, #555);
+      display: block;
+    }
+    .participant-detail {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .participant-bar {
+      background: var(--color-primitive-gray-100, #f0f0f0);
+      border-radius: 4px;
+      height: 6px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .participant-bar__fill {
+      height: 100%;
+      background: var(--color-primitive-blue-700, #264af4);
+      border-radius: 4px;
+    }
+    .participant-bar__label {
+      font-size: 11px;
+      color: var(--color-primitive-gray-700, #555);
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2px;
+    }
+
+    /* ── 主催者情報 ── */
+    .organizer {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .organizer__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--color-primitive-blue-100, #d9e6ff);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .organizer__info {}
+    .organizer__name {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 0 0 4px;
+    }
+    .organizer__meta {
+      font-size: 12px;
+      color: var(--color-primitive-gray-700, #555);
+      margin: 0 0 8px;
+    }
+    .organizer__stats {
+      display: flex;
+      gap: 16px;
+    }
+    .organizer__stat {
+      text-align: center;
+    }
+    .organizer__stat-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-primitive-gray-1200, #1a1a1a);
+      display: block;
+    }
+    .organizer__stat-label {
+      font-size: 11px;
+      color: var(--color-primitive-gray-700, #555);
+      display: block;
+    }
+
+    /* ── FAQ ── */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* ── おすすめイベント ── */
+    .recommend-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .recommend-card {
+      display: flex;
+      gap: 12px;
+      background: var(--color-primitive-gray-50, #f5f5f5);
+      border-radius: 8px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      border: 1px solid var(--color-primitive-gray-200, #e0e0e0);
+    }
+    .recommend-card__image {
+      width: 80px;
+      background: #b8e6c8;
+      flex-shrink: 0;
+    }
+    .recommend-card__image--tournament { background: #c5d7fb; }
+    .recommend-card__image--school { background: #ffd9b8; }
+    .recommend-card__body {
+      padding: 10px 10px 10px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .recommend-card__title {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0;
+    }
+    .recommend-card__date {
+      font-size: 12px;
+      color: var(--color-primitive-gray-700, #555);
+      margin: 0;
+    }
+    .recommend-card__area {
+      font-size: 11px;
+      color: var(--color-primitive-gray-600, #777);
+      margin: 0;
+    }
+
+    /* ── 固定フッター ── */
+    .fixed-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-top: 1px solid var(--color-primitive-gray-200, #e0e0e0);
+      padding: 12px 16px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      z-index: 100;
+    }
+    .fixed-footer .dads-button[data-type="solid-fill"] {
+      flex: 1;
+      justify-content: center;
+    }
+
+    /* chip-labelのアイコン非表示 */
+    .chip-no-icon .dads-chip-label__icon { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- ナビバー -->
+  <div class="nav-bar">
+    <a class="nav-back" href="01_event-list.html">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentcolor" aria-hidden="true">
+        <path d="M15 18L9 12L15 6" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg>
+      イベント一覧
+    </a>
+    <button class="nav-bookmark" aria-label="ブックマーク">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ヒーロー写真 -->
+  <div class="hero">
+    <div class="hero__overlay chip-no-icon">
+      <span class="dads-chip-label" data-style="fill" data-color="green">エンジョイ</span>
+      <span class="dads-chip-label" data-style="fill" data-color="blue">バスケ</span>
+    </div>
+  </div>
+
+  <!-- 基本情報 -->
+  <div class="section">
+    <h1 class="event-title">バスケ エンジョイ交流戦<br>初心者・未経験者歓迎</h1>
+    <div class="event-tags chip-no-icon">
+      <span class="dads-chip-label" data-style="outline" data-color="gray">初心者向け</span>
+      <span class="dads-chip-label" data-style="outline" data-color="gray">一人参加OK</span>
+      <span class="dads-chip-label" data-style="outline" data-color="green">ワイワイ</span>
+    </div>
+
+    <!-- 残り枠 -->
+    <div class="urgency-bar">
+      <span class="urgency-bar__slots">🔥 残り5枠</span>
+      <span class="urgency-bar__participants">23人が参加予定</span>
+    </div>
+
+    <!-- 詳細テーブル -->
+    <table class="info-table">
+      <tr>
+        <th>日時</th>
+        <td>5月10日（土）10:00〜13:00</td>
+      </tr>
+      <tr>
+        <th>エリア</th>
+        <td>渋谷区・港区エリア</td>
+      </tr>
+      <tr>
+        <th>所要時間</th>
+        <td>約3時間（受付15分前）</td>
+      </tr>
+      <tr>
+        <th>レベル</th>
+        <td>初級〜中級（未経験者歓迎）</td>
+      </tr>
+      <tr>
+        <th>参加費</th>
+        <td>
+          <span class="fee-amount">¥1,500</span>
+          <span class="fee-note">（当日現金払い）</span>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- イベント内容 -->
+  <div class="section">
+    <p class="section-title">このイベントについて</p>
+    <p class="event-description">
+      「スポーツを楽しみたいけど、いきなりガチな試合は不安…」そんな方のために作ったエンジョイ交流戦です。<br><br>
+      未経験者や久しぶりにバスケを再開する方も多く参加しています。チーム分けは当日運営が行うので、一人で来ても安心。試合の合間には自然と会話が生まれ、帰る頃には新しい顔見知りができているはずです。<br><br>
+      「久しぶりにスポーツしてみたい」「新しい仲間を作りたい」という方にぴったりのイベントです。
+    </p>
+  </div>
+
+  <!-- 当日の流れ -->
+  <div class="section">
+    <p class="section-title">当日の流れ</p>
+    <ul class="timeline">
+      <li class="timeline__item">
+        <div class="timeline__dot">1</div>
+        <div class="timeline__body">
+          <p class="timeline__title">集合・受付（9:45〜）</p>
+          <p class="timeline__desc">会場入口で受付。ゼッケンをお受け取りください。</p>
+        </div>
+      </li>
+      <li class="timeline__item">
+        <div class="timeline__dot">2</div>
+        <div class="timeline__body">
+          <p class="timeline__title">チーム分け・準備（10:00〜）</p>
+          <p class="timeline__desc">運営がチーム分けを行います。軽くウォームアップ。</p>
+        </div>
+      </li>
+      <li class="timeline__item">
+        <div class="timeline__dot">3</div>
+        <div class="timeline__body">
+          <p class="timeline__title">試合（10:20〜）</p>
+          <p class="timeline__desc">ラウンドロビン形式でチームが入れ替わりながら試合。</p>
+        </div>
+      </li>
+      <li class="timeline__item">
+        <div class="timeline__dot">4</div>
+        <div class="timeline__body">
+          <p class="timeline__title">休憩・歓談（12:00〜）</p>
+          <p class="timeline__desc">参加者同士で自由に交流。次回参加を話す人も多いです。</p>
+        </div>
+      </li>
+      <li class="timeline__item">
+        <div class="timeline__dot">5</div>
+        <div class="timeline__body">
+          <p class="timeline__title">片づけ・解散（13:00〜）</p>
+          <p class="timeline__desc">全員でモップ掛け後、解散。お疲れさまでした！</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 持ち物・設備 -->
+  <div class="section">
+    <p class="section-title">持ち物・設備</p>
+    <div class="items-grid">
+      <div class="items-group">
+        <p class="items-group__label">持ち物</p>
+        <p class="items-group__value">運動できる服装・室内シューズ・飲み物・タオル</p>
+      </div>
+      <div class="items-group">
+        <p class="items-group__label">更衣室</p>
+        <p class="items-group__value"><span class="items-group__badge">あり</span></p>
+      </div>
+      <div class="items-group">
+        <p class="items-group__label">シャワー</p>
+        <p class="items-group__value"><span class="items-group__badge--no items-group__badge">なし</span></p>
+      </div>
+      <div class="items-group">
+        <p class="items-group__label">駐車場</p>
+        <p class="items-group__value"><span class="items-group__badge--no items-group__badge">なし（近隣コインPあり）</span></p>
+      </div>
+      <div class="items-group">
+        <p class="items-group__label">冷暖房</p>
+        <p class="items-group__value"><span class="items-group__badge">あり</span></p>
+      </div>
+      <div class="items-group">
+        <p class="items-group__label">コート</p>
+        <p class="items-group__value">フルコート×2面</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 参加者情報 -->
+  <div class="section">
+    <p class="section-title">参加者の傾向</p>
+    <div class="participant-stats">
+      <div class="stat-item">
+        <span class="stat-value">68%</span>
+        <span class="stat-label">初参加率</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">82%</span>
+        <span class="stat-label">一人参加率</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">20代</span>
+        <span class="stat-label">中心年齢層</span>
+      </div>
+    </div>
+    <div class="participant-detail">
+      <div>
+        <p style="font-size:12px;font-weight:700;margin:0 0 4px;color:#555;">男女比</p>
+        <div class="participant-bar">
+          <div class="participant-bar__fill" style="width:55%;"></div>
+        </div>
+        <div class="participant-bar__label">
+          <span>男性 55%</span><span>女性 45%</span>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:12px;font-weight:700;margin:0 0 4px;color:#555;">レベル</p>
+        <div class="participant-bar">
+          <div class="participant-bar__fill" style="width:70%;background:#0d7a3e;"></div>
+        </div>
+        <div class="participant-bar__label">
+          <span>初級 70%</span><span>中級 30%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主催者情報 -->
+  <div class="section">
+    <p class="section-title">主催者</p>
+    <div class="organizer">
+      <div class="organizer__icon">🏀</div>
+      <div class="organizer__info">
+        <p class="organizer__name">ホイッスル公式</p>
+        <p class="organizer__meta">公式主催 ・ 東京エリア担当</p>
+        <div class="organizer__stats">
+          <div class="organizer__stat">
+            <span class="organizer__stat-value">142</span>
+            <span class="organizer__stat-label">開催実績</span>
+          </div>
+          <div class="organizer__stat">
+            <span class="organizer__stat-value">4.8</span>
+            <span class="organizer__stat-label">評価</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section">
+    <p class="section-title">よくある質問</p>
+    <div class="faq-list">
+      <details class="dads-accordion">
+        <summary class="dads-accordion__summary">
+          <span class="dads-accordion__icon">
+            <svg class="dads-accordion__icon-svg" width="24" height="24" viewbox="0 0 24 24" aria-hidden="true">
+              <path d="M3.3 7.3L12 16L20.7 7.3" fill="none" stroke="currentcolor" stroke-width="2"/>
+            </svg>
+          </span>
+          <h3>初めてでも参加できますか？</h3>
+        </summary>
+        <div class="dads-accordion__content">
+          <p>もちろんです！このイベントは初心者・未経験者を大歓迎しています。参加者の約7割が初参加です。運営スタッフが丁寧にサポートするのでご安心ください。</p>
+        </div>
+      </details>
+
+      <details class="dads-accordion">
+        <summary class="dads-accordion__summary">
+          <span class="dads-accordion__icon">
+            <svg class="dads-accordion__icon-svg" width="24" height="24" viewbox="0 0 24 24" aria-hidden="true">
+              <path d="M3.3 7.3L12 16L20.7 7.3" fill="none" stroke="currentcolor" stroke-width="2"/>
+            </svg>
+          </span>
+          <h3>一人で参加しても大丈夫ですか？</h3>
+        </summary>
+        <div class="dads-accordion__content">
+          <p>はい、参加者の8割以上が一人参加です。チーム分けは運営が行うので、知り合いがいなくても自然と打ち解けられます。</p>
+        </div>
+      </details>
+
+      <details class="dads-accordion">
+        <summary class="dads-accordion__summary">
+          <span class="dads-accordion__icon">
+            <svg class="dads-accordion__icon-svg" width="24" height="24" viewbox="0 0 24 24" aria-hidden="true">
+              <path d="M3.3 7.3L12 16L20.7 7.3" fill="none" stroke="currentcolor" stroke-width="2"/>
+            </svg>
+          </span>
+          <h3>服装や持ち物は何が必要ですか？</h3>
+        </summary>
+        <div class="dads-accordion__content">
+          <p>動きやすい服装と室内シューズをご用意ください。飲み物とタオルも忘れずに。更衣室はありますが、シャワーはありません。</p>
+        </div>
+      </details>
+
+      <details class="dads-accordion">
+        <summary class="dads-accordion__summary">
+          <span class="dads-accordion__icon">
+            <svg class="dads-accordion__icon-svg" width="24" height="24" viewbox="0 0 24 24" aria-hidden="true">
+              <path d="M3.3 7.3L12 16L20.7 7.3" fill="none" stroke="currentcolor" stroke-width="2"/>
+            </svg>
+          </span>
+          <h3>キャンセルはできますか？</h3>
+        </summary>
+        <div class="dads-accordion__content">
+          <p>開催3日前まではキャンセル可能です。それ以降のキャンセルはキャンセル料が発生する場合があります。詳細はご予約後にお送りする案内メールをご確認ください。</p>
+        </div>
+      </details>
+
+      <details class="dads-accordion">
+        <summary class="dads-accordion__summary">
+          <span class="dads-accordion__icon">
+            <svg class="dads-accordion__icon-svg" width="24" height="24" viewbox="0 0 24 24" aria-hidden="true">
+              <path d="M3.3 7.3L12 16L20.7 7.3" fill="none" stroke="currentcolor" stroke-width="2"/>
+            </svg>
+          </span>
+          <h3>遅刻した場合はどうなりますか？</h3>
+        </summary>
+        <div class="dads-accordion__content">
+          <p>15分程度の遅刻であれば参加可能です。事前に運営へご連絡ください。それ以上遅れる場合は参加をお断りする場合があります。</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- おすすめイベント -->
+  <div class="section">
+    <p class="section-title">他のおすすめイベント</p>
+    <div class="recommend-cards">
+
+      <a class="recommend-card" href="02_event-detail.html">
+        <div class="recommend-card__image"></div>
+        <div class="recommend-card__body">
+          <div class="chip-no-icon" style="display:flex;gap:4px;margin-bottom:2px;">
+            <span class="dads-chip-label" data-style="fill" data-color="green" style="font-size:11px;">エンジョイ</span>
+          </div>
+          <p class="recommend-card__title">バスケ 5on5 ゆるゲーム</p>
+          <p class="recommend-card__date">5月18日（日）14:00〜17:00</p>
+          <p class="recommend-card__area">世田谷区・目黒区エリア</p>
+        </div>
+      </a>
+
+      <a class="recommend-card" href="02_event-detail.html">
+        <div class="recommend-card__image recommend-card__image--tournament"></div>
+        <div class="recommend-card__body">
+          <div class="chip-no-icon" style="display:flex;gap:4px;margin-bottom:2px;">
+            <span class="dads-chip-label" data-style="fill" data-color="blue" style="font-size:11px;">大会</span>
+          </div>
+          <p class="recommend-card__title">バスケ 3on3 初中級大会</p>
+          <p class="recommend-card__date">5月24日（土）10:00〜15:00</p>
+          <p class="recommend-card__area">渋谷区・港区エリア</p>
+        </div>
+      </a>
+
+      <a class="recommend-card" href="02_event-detail.html">
+        <div class="recommend-card__image recommend-card__image--school"></div>
+        <div class="recommend-card__body">
+          <div class="chip-no-icon" style="display:flex;gap:4px;margin-bottom:2px;">
+            <span class="dads-chip-label" data-style="fill" data-color="orange" style="font-size:11px;">スクール</span>
+          </div>
+          <p class="recommend-card__title">バスケ基礎スクール ドリブル特訓</p>
+          <p class="recommend-card__date">5月22日（木）19:00〜21:00</p>
+          <p class="recommend-card__area">新宿区・文京区エリア</p>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- 固定フッター -->
+  <div class="fixed-footer">
+    <button class="dads-button" data-size="md" data-type="solid-fill">予約する</button>
+    <a href="01_login.html">
+      <button class="dads-button" data-size="md" data-type="outline">ログイン</button>
+    </a>
+  </div>
+
+</body>
+</html>
