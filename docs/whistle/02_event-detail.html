@@ -38,7 +38,7 @@
       align-items: center;
       gap: 4px;
       font-size: 14px;
-      color: var(--color-primitive-blue-700, #264af4);
+      color: var(--color-primitive-gray-1200, #1a1a1a);
       text-decoration: none;
     }
     .nav-back svg { flex-shrink: 0; }
@@ -54,7 +54,7 @@
 
     /* ── ヒーロー写真 ── */
     .hero {
-      background: #b8e6c8;
+      background: #d0d0d0;
       height: 220px;
       position: relative;
       display: flex;
@@ -78,7 +78,7 @@
       color: var(--color-primitive-gray-1200, #1a1a1a);
       margin: 0 0 14px;
       padding-bottom: 8px;
-      border-bottom: 2px solid var(--color-primitive-blue-700, #264af4);
+      border-bottom: 2px solid var(--color-primitive-gray-1200, #1a1a1a);
       display: inline-block;
     }
 
@@ -96,8 +96,8 @@
       margin-bottom: 12px;
     }
     .urgency-bar {
-      background: var(--color-primitive-red-50, #fff0f0);
-      border: 1px solid var(--color-primitive-red-200, #ffb3b3);
+      background: var(--color-primitive-gray-100, #f0f0f0);
+      border: 1px solid var(--color-primitive-gray-300, #d0d0d0);
       border-radius: 6px;
       padding: 10px 14px;
       margin-bottom: 16px;
@@ -108,7 +108,7 @@
     .urgency-bar__slots {
       font-size: 13px;
       font-weight: 700;
-      color: #c00;
+      color: var(--color-primitive-gray-1200, #1a1a1a);
     }
     .urgency-bar__participants {
       font-size: 13px;
@@ -142,7 +142,7 @@
     .fee-amount {
       font-size: 20px;
       font-weight: 700;
-      color: var(--color-primitive-blue-700, #264af4);
+      color: var(--color-primitive-gray-1200, #1a1a1a);
     }
     .fee-note {
       font-size: 12px;
@@ -179,13 +179,13 @@
       top: 28px;
       bottom: -8px;
       width: 2px;
-      background: var(--color-primitive-blue-100, #d9e6ff);
+      background: var(--color-primitive-gray-300, #d0d0d0);
     }
     .timeline__dot {
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background: var(--color-primitive-blue-700, #264af4);
+      background: var(--color-primitive-gray-1200, #1a1a1a);
       color: #fff;
       font-size: 12px;
       font-weight: 700;
@@ -231,8 +231,8 @@
       font-size: 11px;
       padding: 2px 6px;
       border-radius: 3px;
-      background: var(--color-primitive-green-50, #e6f7ed);
-      color: #0d7a3e;
+      background: var(--color-primitive-gray-200, #e0e0e0);
+      color: var(--color-primitive-gray-1200, #1a1a1a);
     }
     .items-group__badge--no {
       background: var(--color-primitive-gray-100, #f0f0f0);
@@ -250,7 +250,7 @@
     .stat-value {
       font-size: 22px;
       font-weight: 700;
-      color: var(--color-primitive-blue-700, #264af4);
+      color: var(--color-primitive-gray-1200, #1a1a1a);
       display: block;
     }
     .stat-label {
@@ -273,7 +273,7 @@
     }
     .participant-bar__fill {
       height: 100%;
-      background: var(--color-primitive-blue-700, #264af4);
+      background: var(--color-primitive-gray-1200, #1a1a1a);
       border-radius: 4px;
     }
     .participant-bar__label {
@@ -294,7 +294,7 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: var(--color-primitive-blue-100, #d9e6ff);
+      background: var(--color-primitive-gray-200, #e0e0e0);
       flex-shrink: 0;
       display: flex;
       align-items: center;
@@ -356,11 +356,11 @@
     }
     .recommend-card__image {
       width: 80px;
-      background: #b8e6c8;
+      background: #d0d0d0;
       flex-shrink: 0;
     }
-    .recommend-card__image--tournament { background: #c5d7fb; }
-    .recommend-card__image--school { background: #ffd9b8; }
+    .recommend-card__image--tournament { background: #c0c0c0; }
+    .recommend-card__image--school { background: #b8b8b8; }
     .recommend-card__body {
       padding: 10px 10px 10px 0;
       display: flex;
@@ -404,6 +404,18 @@
 
     /* chip-labelのアイコン非表示 */
     .chip-no-icon .dads-chip-label__icon { display: none; }
+
+    /* chip-label 全色をモノクロに統一 */
+    .dads-chip-label[data-style="fill"] {
+      background: #1a1a1a !important;
+      color: #fff !important;
+      border-color: #1a1a1a !important;
+    }
+    .dads-chip-label[data-style="outline"] {
+      background: transparent !important;
+      color: #1a1a1a !important;
+      border-color: #1a1a1a !important;
+    }
   </style>
 </head>
 <body>
@@ -587,7 +599,7 @@
       <div>
         <p style="font-size:12px;font-weight:700;margin:0 0 4px;color:#555;">レベル</p>
         <div class="participant-bar">
-          <div class="participant-bar__fill" style="width:70%;background:#0d7a3e;"></div>
+          <div class="participant-bar__fill" style="width:70%;"></div>
         </div>
         <div class="participant-bar__label">
           <span>初級 70%</span><span>中級 30%</span>
