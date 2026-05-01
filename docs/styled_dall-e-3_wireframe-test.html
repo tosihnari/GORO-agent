@@ -1,0 +1,583 @@
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>サービスLP ワイヤーフレーム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink: #FF1F6D;
+      --pink-dark: #D4005A;
+      --pink-light: #FF4D8D;
+      --black: #0A0A0A;
+      --dark: #111111;
+      --dark-gray: #1A1A1A;
+      --mid-gray: #2A2A2A;
+      --gray: #444444;
+      --light-gray: #888888;
+      --border-gray: #222222;
+      --white: #FFFFFF;
+      --off-white: #F0F0F0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', 'Inter', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ========== ナビ ========== */
+    nav {
+      border-bottom: 1px solid var(--border-gray);
+      padding: 18px 0;
+      background: var(--black);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    nav .inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      color: var(--white);
+      position: relative;
+    }
+
+    .logo::after {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--pink);
+      border-radius: 50%;
+      margin-left: 4px;
+      vertical-align: super;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--light-gray);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      transition: color 0.2s ease;
+      text-transform: uppercase;
+    }
+
+    .nav-links a:hover {
+      color: var(--white);
+    }
+
+    .btn-nav {
+      background: var(--pink) !important;
+      color: var(--white) !important;
+      padding: 9px 22px !important;
+      border-radius: 2px !important;
+      text-decoration: none;
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.1em !important;
+      text-transform: uppercase;
+      transition: background 0.2s ease, transform 0.15s ease !important;
+      display: inline-block;
+    }
+
+    .btn-nav:hover {
+      background: var(--pink-dark) !important;
+      color: var(--white) !important;
+      transform: translateY(-1px);
+    }
+
+    /* ========== ヒーロー ========== */
+    .hero {
+      padding: 120px 0 100px;
+      text-align: center;
+      background: var(--dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(255, 31, 109, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--pink), transparent);
+    }
+
+    .hero .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 8vw, 88px);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      margin-bottom: 24px;
+      line-height: 1.05;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .hero h1 span {
+      color: var(--pink);
+    }
+
+    .hero p {
+      font-size: clamp(14px, 2vw, 17px);
+      color: var(--light-gray);
+      margin-bottom: 48px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.85;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--pink);
+      color: var(--white);
+      padding: 16px 44px;
+      border-radius: 2px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+    }
+
+    .btn-primary:hover {
+      background: var(--pink-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255, 31, 109, 0.4);
+    }
+
+    /* ========== 特徴 ========== */
+    .features {
+      padding: 100px 0;
+      background: var(--black);
+    }
+
+    .features h2 {
+      text-align: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      margin-bottom: 64px;
+      color: var(--white);
+      text-transform: uppercase;
+      position: relative;
+    }
+
+    .features h2::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 3px;
+      background: var(--pink);
+      margin: 16px auto 0;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      border: 1px solid var(--border-gray);
+      border-radius: 4px;
+      padding: 40px 32px;
+      text-align: center;
+      background: var(--dark-gray);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease, transform 0.25s ease;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--pink);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--gray);
+      transform: translateY(-4px);
+    }
+
+    .feature-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--mid-gray);
+      border-radius: 4px;
+      margin: 0 auto 24px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feature-icon::after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      background: var(--pink);
+      border-radius: 2px;
+      display: block;
+      opacity: 0.9;
+    }
+
+    .feature-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--white);
+      letter-spacing: 0.06em;
+    }
+
+    .feature-card p {
+      font-size: 13px;
+      color: var(--light-gray);
+      line-height: 1.85;
+      letter-spacing: 0.03em;
+    }
+
+    /* ========== 実績 ========== */
+    .stats {
+      background: var(--dark-gray);
+      padding: 80px 0;
+      border-top: 1px solid var(--border-gray);
+      border-bottom: 1px solid var(--border-gray);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stats::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 100px,
+        rgba(255,255,255,0.01) 100px,
+        rgba(255,255,255,0.01) 101px
+      );
+      pointer-events: none;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stats-grid > div {
+      position: relative;
+      padding: 20px 0;
+    }
+
+    .stats-grid > div:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 20%;
+      height: 60%;
+      width: 1px;
+      background: var(--border-gray);
+    }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 8vw, 76px);
+      font-weight: 400;
+      color: var(--pink);
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--light-gray);
+      margin-top: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    /* ========== CTA ========== */
+    .cta {
+      padding: 110px 0;
+      text-align: center;
+      background: var(--dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(255, 31, 109, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 6vw, 62px);
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .cta p {
+      color: var(--light-gray);
+      margin-bottom: 44px;
+      font-size: 14px;
+      letter-spacing: 0.06em;
+      font-weight: 400;
+    }
+
+    /* ========== フッター ========== */
+    footer {
+      border-top: 1px solid var(--border-gray);
+      padding: 36px 0;
+      text-align: center;
+      color: var(--gray);
+      font-size: 12px;
+      background: var(--black);
+      letter-spacing: 0.08em;
+    }
+
+    /* ========== レスポンシブ ========== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 80px 0 72px;
+      }
+
+      .features {
+        padding: 72px 0;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .stats {
+        padding: 60px 0;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .stats-grid > div {
+        padding: 28px 0;
+        border-bottom: 1px solid var(--border-gray);
+      }
+
+      .stats-grid > div:last-child {
+        border-bottom: none;
+      }
+
+      .stats-grid > div::after {
+        display: none !important;
+      }
+
+      .cta {
+        padding: 80px 0;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .features-grid .feature-card:last-child {
+        grid-column: span 2;
+        max-width: 400px;
+        margin: 0 auto;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container inner">
+      <div class="logo">LOGO</div>
+      <ul class="nav-links">
+        <li><a href="#">サービス</a></li>
+        <li><a href="#">実績</a></li>
+        <li><a href="#">会社情報</a></li>
+        <li><a href="#" class="btn-nav">お問い合わせ</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <h1>サービスのキャッチコピーが入ります</h1>
+      <p>サービスの概要説明が入ります。ターゲットユーザーへの価値提案を簡潔に伝えます。</p>
+      <a href="#" class="btn-primary">無料で始める</a>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="container">
+      <h2>選ばれる3つの理由</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"></div>
+          <h3>特徴1のタイトル</h3>
+          <p>特徴の説明文が入ります。ユーザーにとってのメリットを具体的に説明します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"></div>
+          <h3>特徴2のタイトル</h3>
+          <p>特徴の説明文が入ります。ユーザーにとってのメリットを具体的に説明します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"></div>
+          <h3>特徴3のタイトル</h3>
+          <p>特徴の説明文が入ります。ユーザーにとってのメリットを具体的に説明します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div>
+          <div class="stat-number">200+</div>
+          <div class="stat-label">導入企業数</div>
+        </div>
+        <div>
+          <div class="stat-number">98%</div>
+          <div class="stat-label">顧客満足度</div>
+        </div>
+        <div>
+          <div class="stat-number">5年</div>
+          <div class="stat-label">サービス提供実績</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <h2>まずは無料でお試しください</h2>
+      <p>クレジットカード不要。いつでもキャンセル可能です。</p>
+      <a href="#" class="btn-primary">無料トライアルを始める</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Company Name. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
+```

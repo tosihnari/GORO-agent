@@ -12,19 +12,38 @@
 - 事業：UIUX事業 / デザイン・マーケ支援事業
 
 ## ディレクトリ構成
-- claude/     → Claude Code設定
+- .claude/    → Claude Code設定（システム管理 + GORO管理を統合）
 - projects/   → 案件実装ファイル
 - marketing/  → マーケ作業中データ
 - sales/      → 営業作業中データ
 - finance/    → 経理作業中データ
 - hr/         → 人事作業中データ
+- docs/       → GitHub Pages公開用サイト（テスト・検証サイト含む）
 - gdrive/     → Googleドライブ同期
-- scripts/    → 自動化スクリプト
-- templates/  → 雛形
-- private/    → 機密情報
+- private/    → 機密情報・非公開の検証・学習プロジェクト
+
+## .claude/ ディレクトリ構成
+
+```
+.claude/
+├── command/      → Claudeカスタムコマンド（.mdファイル）
+├── credentials/  → 認証情報（gitignore済・直接編集不可）
+├── goro-agent/   → goro-agent設定テンプレート
+├── mcp/          → MCPサーバー・分析スクリプト類
+├── skills/       → Claudeカスタムスキル
+├── settings.json → プロジェクト設定（git管理）
+└── settings.local.json → ローカル設定（gitignore済）
+```
+
+**ファイル配置ルール**
+- `.claude/` 直下にスクリプト・設定ファイルを直置きしない
+- 新しいツール・スクリプトは用途に応じたサブディレクトリを作成して格納する
+- ディレクトリ名に数字プレフィックス（`00_` 等）を使わない
 
 ## 全社共通ルール
 - GORO内部の機密情報をgitにcommitしない
+- 検証・学習プロジェクトは公開可なら `docs/`、非公開なら `private/` に格納する
+- クライアントワーク・社内業務（マーケ・HR等）以外のテスト的な制作物も同様
 
 ## コミュニケーション
 - 社内連絡：Slack

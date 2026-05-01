@@ -1,0 +1,698 @@
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>サービスLP ワイヤーフレーム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink: #FF2D6B;
+      --pink-light: #FF5C8A;
+      --pink-dark: #CC1F54;
+      --black: #0A0A0A;
+      --dark: #141414;
+      --dark-gray: #1E1E1E;
+      --mid-gray: #2E2E2E;
+      --light-gray: #888888;
+      --white: #FFFFFF;
+      --off-white: #F0F0F0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      border-bottom: 1px solid var(--mid-gray);
+      padding: 18px 0;
+      background: var(--black);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+
+    nav .inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--white);
+      letter-spacing: 0.15em;
+      position: relative;
+    }
+
+    .logo::after {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--pink);
+      border-radius: 50%;
+      margin-left: 4px;
+      vertical-align: super;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--light-gray);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+      font-family: 'Oswald', sans-serif;
+    }
+
+    .nav-links a:hover {
+      color: var(--white);
+    }
+
+    .btn-nav {
+      background: var(--pink) !important;
+      color: var(--white) !important;
+      padding: 9px 22px !important;
+      border-radius: 2px !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.05em !important;
+      transition: background 0.2s ease, transform 0.15s ease !important;
+      font-family: 'Oswald', sans-serif !important;
+    }
+
+    .btn-nav:hover {
+      background: var(--pink-dark) !important;
+      transform: translateY(-1px);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 100px 0 90px;
+      text-align: left;
+      background: var(--dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 55%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--dark) 0%, var(--dark-gray) 40%, #2a0a14 100%);
+      clip-path: polygon(8% 0%, 100% 0%, 100% 100%, 0% 100%);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: 10%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255, 45, 107, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-family: 'Oswald', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--pink);
+      border: 1px solid var(--pink);
+      padding: 4px 12px;
+      border-radius: 2px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 8vw, 80px);
+      font-weight: 400;
+      margin-bottom: 20px;
+      line-height: 1.05;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      max-width: 620px;
+    }
+
+    .hero h1 span {
+      color: var(--pink);
+    }
+
+    .hero p {
+      font-size: 15px;
+      color: var(--light-gray);
+      margin-bottom: 40px;
+      line-height: 1.8;
+      max-width: 480px;
+      font-weight: 400;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--pink);
+      color: var(--white);
+      padding: 15px 40px;
+      border-radius: 2px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: 'Oswald', sans-serif;
+      transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transition: left 0.4s ease;
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary:hover {
+      background: var(--pink-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 45, 107, 0.4);
+    }
+
+    .hero-accent-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 60px;
+    }
+
+    .hero-accent-line .line {
+      width: 40px;
+      height: 2px;
+      background: var(--pink);
+    }
+
+    .hero-accent-line span {
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--light-gray);
+    }
+
+    /* ===== FEATURES ===== */
+    .features {
+      padding: 100px 0;
+      background: var(--black);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-eyebrow {
+      display: inline-block;
+      font-family: 'Oswald', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 14px;
+    }
+
+    .features h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      margin-bottom: 0;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .feature-card {
+      background: var(--dark-gray);
+      border: none;
+      border-radius: 0;
+      padding: 40px 32px;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.25s ease;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--pink);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .feature-card:hover {
+      background: var(--mid-gray);
+    }
+
+    .feature-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 64px;
+      font-weight: 400;
+      color: rgba(255, 45, 107, 0.12);
+      line-height: 1;
+      margin-bottom: 16px;
+      letter-spacing: 0.02em;
+    }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--pink);
+      border-radius: 2px;
+      margin: 0 0 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feature-icon::after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      background: var(--white);
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
+
+    .feature-card h3 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: var(--white);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .feature-card p {
+      font-size: 13px;
+      color: var(--light-gray);
+      line-height: 1.8;
+    }
+
+    /* ===== STATS ===== */
+    .stats {
+      background: var(--pink);
+      padding: 70px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stats::before {
+      content: 'RESULTS';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 160px;
+      color: rgba(0, 0, 0, 0.08);
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .stats-grid > div {
+      padding: 20px;
+      border-right: 1px solid rgba(0,0,0,0.15);
+    }
+
+    .stats-grid > div:last-child {
+      border-right: none;
+    }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 8vw, 72px);
+      font-weight: 400;
+      color: var(--white);
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.75);
+      margin-top: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-family: 'Oswald', sans-serif;
+    }
+
+    /* ===== CTA ===== */
+    .cta {
+      padding: 100px 0;
+      text-align: center;
+      background: var(--dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(255, 45, 107, 0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .cta .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 6vw, 60px);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .cta p {
+      color: var(--light-gray);
+      margin-bottom: 40px;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .cta-note {
+      display: block;
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--light-gray);
+      letter-spacing: 0.05em;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      border-top: 1px solid var(--mid-gray);
+      padding: 36px 0;
+      text-align: center;
+      background: var(--black);
+    }
+
+    footer p {
+      color: #555;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      font-family: 'Oswald', sans-serif;
+      text-transform: uppercase;
+    }
+
+    footer p span {
+      color: var(--pink);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      nav .inner {
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .nav-links {
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .nav-links a {
+        font-size: 11px;
+      }
+
+      .hero {
+        padding: 70px 0 60px;
+        text-align: center;
+      }
+
+      .hero::before {
+        display: none;
+      }
+
+      .hero h1 {
+        max-width: 100%;
+        font-size: clamp(40px, 10vw, 56px);
+      }
+
+      .hero p {
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-cta {
+        justify-content: center;
+      }
+
+      .hero-eyebrow {
+        display: block;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-accent-line {
+        justify-content: center;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        gap: 2px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .stats-grid > div {
+        border-right: none;
+        border-bottom: 1px solid rgba(0,0,0,0.15);
+        padding: 28px 20px;
+      }
+
+      .stats-grid > div:last-child {
+        border-bottom: none;
+      }
+
+      .stats::before {
+        font-size: 80px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo {
+        font-size: 24px;
+      }
+
+      .btn-primary {
+        padding: 13px 28px;
+        font-size: 13px;
+      }
+
+      .features {
+        padding: 70px 0;
+      }
+
+      .feature-card {
+        padding: 30px 24px;
+      }
+
+      .cta {
+        padding: 70px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container inner">
+      <div class="logo">LOGO</div>
+      <ul class="nav-links">
+        <li><a href="#">サービス</a></li>
+        <li><a href="#">実績</a></li>
+        <li><a href="#">会社情報</a></li>
+        <li><a href="#" class="btn-nav">お問い合わせ</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-eyebrow">Manga &amp; IP Creation</div>
+      <h1>サービスの<span>キャッチ</span>コピーが入ります</h1>
+      <p>サービスの概要説明が入ります。ターゲットユーザーへの価値提案を簡潔に伝えます。</p>
+      <div class="hero-cta">
+        <a href="#" class="btn-primary">無料で始める</a>
+      </div>
+      <div class="hero-accent-line">
+        <div class="line"></div>
+        <span>Publishing · IT · Game Companies</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">Why Choose Us</div>
+        <h2>選ばれる3つの理由</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-number">01</div>
+          <div class="feature-icon"></div>
+          <h3>特徴1のタイトル</h3>
+          <p>特徴の説明文が入ります。ユーザーにとってのメリットを具体的に説明します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-number">02</div>
+          <div class="feature-icon"></div>
+          <h3>特徴2のタイトル</h3>
+          <p>特徴の説明文が入ります。ユーザーにとってのメリットを具体的に説明します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-number">03</div>
+          <div class="feature-icon"></div>
+          <h3>特徴3のタイトル</h3>
+          <p>特徴の説明文が入ります。ユーザーにとってのメリットを具体的に説明します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div>
+          <div class="stat-number">200+</div>
+          <div class="stat-label">導入企業数</div>
+        </div>
+        <div>
+          <div class="stat-number">98%</div>
+          <div class="stat-label">顧客満足度</div>
+        </div>
+        <div>
+          <div class="stat-number">5年</div>
+          <div class="stat-label">サービス提供実績</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <h2>まずは無料でお試しください</h2>
+      <p>クレジットカード不要。いつでもキャンセル可能です。</p>
+      <a href="#" class="btn-primary">無料トライアルを始める</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 <span>Company Name</span>. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
+```

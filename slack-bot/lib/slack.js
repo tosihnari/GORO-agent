@@ -58,6 +58,34 @@ export async function getChannelHistory(token, channel, limit = 30) {
   return data.messages ?? [];
 }
 
+export async function searchChannels(token, keyword) {
+  const allChannels = [];
+  let cursor = '';
+
+  do {
+    const params = new URLSearchParams({
+      exclude_archived: true,
+      types: 'public_channel,private_channel',
+      limit: 200,
+    });
+    if (cursor) params.set('cursor', cursor);
+
+    const res = await fetch(`https://slack.com/api/conversations.list?${params}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await res.json();
+    if (!data.ok) {
+      console.error('Slack searchChannels error:', data.error);
+      break;
+    }
+    allChannels.push(...(data.channels ?? []));
+    cursor = data.response_metadata?.next_cursor ?? '';
+  } while (cursor);
+
+  const kw = keyword.toLowerCase();
+  return allChannels.filter(ch => ch.name.toLowerCase().includes(kw));
+}
+
 export async function getUserInfo(token, userId) {
   const params = new URLSearchParams({ user: userId });
   const res = await fetch(`https://slack.com/api/users.info?${params}`, {

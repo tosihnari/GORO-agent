@@ -3,7 +3,7 @@ const NOTION_API = 'https://api.notion.com/v1';
 // DBのID（Vercel環境変数で管理。将来DBが増えたら環境変数を追加する）
 const DB_IDS = {
   partnerProjects: process.env.NOTION_PARTNER_PROJECT_DB_ID ?? 'bb9b7945290f442694de5a75013cfee2',
-  // taskManagement: process.env.NOTION_TASK_DB_ID,  // 将来追加
+  marketing: process.env.NOTION_MARKETING_DB_ID ?? 'c79513ee26c94b03a37cdef93d49ea96',
 };
 
 async function notionGet(path, timeoutMs = 15000) {
@@ -116,6 +116,50 @@ export async function queryProjectDB(keyword) {
   }
 }
 
+// 社内マーケティングDBを直接クエリ
+export async function queryMarketingDB(keyword) {
+  console.log('MarketingDB query keyword:', keyword);
+  try {
+    const data = await notionFetch(`/databases/${DB_IDS.marketing}/query`, {
+      filter: {
+        property: 'Name',
+        title: { contains: keyword },
+      },
+      page_size: 5,
+    });
+
+    const results = data.results ?? [];
+    console.log('MarketingDB results:', results.length);
+
+    if (results.length === 0) return 'マーケティングDBに該当するプロジェクトは見つかりませんでした。';
+
+    const summaries = results.map(page => {
+      const props = page.properties ?? {};
+      const title = extractTitle(page);
+      const pageId = page.id.replace(/-/g, '');
+      const url = `https://www.notion.so/${pageId}`;
+
+      const lines = [title, url];
+      const fieldMap = {
+        'ステータス': 'ステータス',
+        '担当者': '担当者',
+        '開始日': '開始日',
+        '終了日': '終了日',
+      };
+      for (const [propName, label] of Object.entries(fieldMap)) {
+        const val = getPropText(props[propName]);
+        if (val) lines.push(`• ${label}：${val}`);
+      }
+      return lines.join('\n');
+    });
+
+    return summaries.join('\n\n');
+  } catch (error) {
+    console.error('MarketingDB query error:', error.name === 'AbortError' ? 'Timeout' : error.message);
+    return '';
+  }
+}
+
 // URLまたはIDからNotionのページIDを抽出（32文字の16進数）
 function extractPageId(urlOrId) {
   const match = urlOrId.match(/([a-f0-9]{32})/i);
@@ -163,7 +207,10 @@ export async function readNotionPage(urlOrId) {
     for (const block of data.results) {
       if (block.type === 'child_page') {
         const childId = block.id.replace(/-/g, '');
-        childPages.push(`• ${block.child_page.title}: https://www.notion.so/${childId}`);
+        childPages.push(`• [ページ] ${block.child_page.title}: https://www.notion.so/${childId}`);
+      } else if (block.type === 'child_database') {
+        const dbId = block.id.replace(/-/g, '');
+        childPages.push(`• [データベース] ${block.child_database.title}: https://www.notion.so/${dbId}`);
       } else {
         const text = blockToText(block);
         if (text) lines.push(text);
@@ -177,6 +224,44 @@ export async function readNotionPage(urlOrId) {
     return result.join('\n') || 'ページの本文は空でした。';
   } catch (error) {
     console.error('readNotionPage error:', error.name === 'AbortError' ? 'Timeout' : error.message);
+    return '';
+  }
+}
+
+// 任意のNotionデータベースのエントリ一覧を取得
+export async function queryNotionDB(urlOrId, keyword = '') {
+  const dbId = extractPageId(urlOrId);
+  if (!dbId) return 'データベースIDを取得できませんでした。';
+
+  console.log('QueryNotionDB:', dbId, 'keyword:', keyword);
+  try {
+    const body = { page_size: 15 };
+
+    const data = await notionFetch(`/databases/${dbId}/query`, body);
+    const results = data.results ?? [];
+
+    if (results.length === 0) return 'データベースにエントリが見つかりませんでした。';
+
+    const entries = results.map(page => {
+      const title = extractTitle(page);
+      const pageId = page.id.replace(/-/g, '');
+      const url = `https://www.notion.so/${pageId}`;
+      const props = page.properties ?? {};
+
+      const lines = [`• ${title}: ${url}`];
+      // 日付プロパティがあれば付加
+      for (const [, prop] of Object.entries(props)) {
+        if (prop.type === 'date' && prop.date?.start) {
+          lines[0] += ` (${prop.date.start})`;
+          break;
+        }
+      }
+      return lines[0];
+    });
+
+    return entries.join('\n');
+  } catch (error) {
+    console.error('queryNotionDB error:', error.name === 'AbortError' ? 'Timeout' : error.message);
     return '';
   }
 }

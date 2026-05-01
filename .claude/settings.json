@@ -3,7 +3,33 @@
     "allow": [
       "Bash(git *)",
       "Bash(bash claude/goro-agent/setup.sh)",
-      "Bash(chmod +x claude/goro-agent/setup.sh)"
+      "Bash(chmod +x claude/goro-agent/setup.sh)",
+      "Bash(gh auth:*)",
+      "Bash(curl -s -X POST https://api.notion.com/v1/search -H 'Authorization: Bearer ntn_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' -H 'Content-Type: application/json' -H 'Notion-Version: 2022-06-28' -d '{\"query\": \"東京国際ツアーズ\", \"page_size\": 1}' --max-time 10)",
+      "Bash(gcloud --version)",
+      "Bash(python3.13 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(d.get\\('client_id',''\\)[:30]+'...' if 'client_id' in d else d.get\\('type','unknown'\\)\\)\")",
+      "Bash(printf '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{},\"clientInfo\":{\"name\":\"test\",\"version\":\"1.0\"}}}\\\\n{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\",\"params\":{}}\\\\n{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\",\"params\":{}}\\\\n')",
+      "Bash(/opt/homebrew/bin/pip3.13 show:*)",
+      "Bash(python3.13 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('type:', d.get\\('type','N/A'\\)\\); print\\('client_id prefix:', str\\(d.get\\('client_id',''\\)\\)[:30]\\)\")",
+      "Bash(python3.13 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('scopes:', d.get\\('scopes', 'not set'\\)\\)\")",
+      "Bash(cp -r claude/command .claude/command)",
+      "Bash(cp -r claude/credentials .claude/credentials)",
+      "Bash(cp -r claude/goro-agent .claude/goro-agent)",
+      "Bash(cp -r claude/mcp .claude/mcp)",
+      "Bash(npx -y @modelcontextprotocol/server-gdrive --help)",
+      "Bash(GDRIVE_CREDENTIALS_FILE=\"/Users/toshinariasahi/Desktop/Master/.claude/credentials/client_secret_769126280882-ni3e2orv4642skdt978uls8ie12jcnmv.apps.googleusercontent.com.json\" npx -y @modelcontextprotocol/server-gdrive auth)",
+      "Bash(npm root:*)",
+      "Bash(cp \"/Users/toshinariasahi/Desktop/Master/.claude/credentials/client_secret_769126280882-ni3e2orv4642skdt978uls8ie12jcnmv.apps.googleusercontent.com.json\" \"/opt/homebrew/lib/node_modules/@modelcontextprotocol/server-gdrive/gcp-oauth.keys.json\")",
+      "Bash(GDRIVE_CREDENTIALS_FILE=\"/Users/toshinariasahi/Desktop/Master/.claude/credentials/client_secret_769126280882-ni3e2orv4642skdt978uls8ie12jcnmv.apps.googleusercontent.com.json\" mcp-server-gdrive auth)",
+      "Bash(cp \"/Users/toshinariasahi/Desktop/Master/.claude/credentials/client_secret_769126280882-ni3e2orv4642skdt978uls8ie12jcnmv.apps.googleusercontent.com.json\" \"/opt/homebrew/lib/node_modules/gcp-oauth.keys.json\")",
+      "Bash(mcp-server-gdrive auth:*)",
+      "Edit(/.claude/skills/seo-writing/**)"
+    ],
+    "additionalDirectories": [
+      "/Users/toshinariasahi/Desktop/Master",
+      "/Users/toshinariasahi/.claude_goro",
+      "/Users/toshinariasahi/.claude",
+      "/Users/toshinariasahi/Desktop/Master/.claude/credentials"
     ]
   }
 }

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>サービスLP ワイヤーフレーム</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; background: #fff; color: #333; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* ナビ */
+    nav { border-bottom: 1px solid #ccc; padding: 16px 0; }
+    nav .inner { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 20px; font-weight: bold; }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a { text-decoration: none; color: #333; }
+    .btn-nav { background: #333; color: #fff; padding: 8px 20px; border-radius: 4px; text-decoration: none; }
+
+    /* ヒーロー */
+    .hero { padding: 80px 0; text-align: center; background: #f5f5f5; }
+    .hero h1 { font-size: 40px; font-weight: bold; margin-bottom: 16px; }
+    .hero p { font-size: 18px; color: #666; margin-bottom: 32px; }
+    .btn-primary { display: inline-block; background: #333; color: #fff; padding: 14px 36px; border-radius: 4px; text-decoration: none; font-size: 16px; }
+
+    /* 特徴 */
+    .features { padding: 80px 0; }
+    .features h2 { text-align: center; font-size: 28px; margin-bottom: 48px; }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .feature-card { border: 1px solid #ddd; border-radius: 8px; padding: 32px; text-align: center; }
+    .feature-icon { width: 48px; height: 48px; background: #eee; border-radius: 50%; margin: 0 auto 16px; }
+    .feature-card h3 { font-size: 18px; margin-bottom: 12px; }
+    .feature-card p { font-size: 14px; color: #666; line-height: 1.7; }
+
+    /* 実績 */
+    .stats { background: #f5f5f5; padding: 60px 0; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; text-align: center; }
+    .stat-number { font-size: 48px; font-weight: bold; }
+    .stat-label { font-size: 14px; color: #666; margin-top: 8px; }
+
+    /* CTA */
+    .cta { padding: 80px 0; text-align: center; }
+    .cta h2 { font-size: 28px; margin-bottom: 16px; }
+    .cta p { color: #666; margin-bottom: 32px; }
+
+    /* フッター */
+    footer { border-top: 1px solid #ccc; padding: 32px 0; text-align: center; color: #999; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container inner">
+      <div class="logo">LOGO</div>
+      <ul class="nav-links">
+        <li><a href="#">サービス</a></li>
+        <li><a href="#">実績</a></li>
+        <li><a href="#">会社情報</a></li>
+        <li><a href="#" class="btn-nav">お問い合わせ</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <h1>サービスのキャッチコピーが入ります</h1>
+      <p>サービスの概要説明が入ります。ターゲットユーザーへの価値提案を簡潔に伝えます。</p>
+      <a href="#" class="btn-primary">無料で始める</a>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="container">
+      <h2>選ばれる3つの理由</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"></div>
+          <h3>特徴1のタイトル</h3>
+          <p>特徴の説明文が入ります。ユーザーにとってのメリットを具体的に説明します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"></div>
+          <h3>特徴2のタイトル</h3>
+          <p>特徴の説明文が入ります。ユーザーにとってのメリットを具体的に説明します。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"></div>
+          <h3>特徴3のタイトル</h3>
+          <p>特徴の説明文が入ります。ユーザーにとってのメリットを具体的に説明します。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div>
+          <div class="stat-number">200+</div>
+          <div class="stat-label">導入企業数</div>
+        </div>
+        <div>
+          <div class="stat-number">98%</div>
+          <div class="stat-label">顧客満足度</div>
+        </div>
+        <div>
+          <div class="stat-number">5年</div>
+          <div class="stat-label">サービス提供実績</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <h2>まずは無料でお試しください</h2>
+      <p>クレジットカード不要。いつでもキャンセル可能です。</p>
+      <a href="#" class="btn-primary">無料トライアルを始める</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Company Name. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -6,8 +6,10 @@ __pycache__/
 *.pyc
 
 # Claude Code シークレット（gitに入れない）
-claude/goro-agent/.env
-claude/credentials/
+.claude/goro-agent/.env
+.claude/credentials/
+.claude/mcp/ga4_auth.py
+.env
 
 # ローカルのみ（gitに入れない）
 projects/
