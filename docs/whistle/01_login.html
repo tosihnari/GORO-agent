@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ログイン</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/global.css">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/components/button/button.css">
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #e8e8e8;
+      margin: 0;
+      color: #1a1a1a;
+    }
+
+    .page-wrapper {
+      max-width: 400px;
+      margin: 0 auto;
+      background: #f7f8fa;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px 24px 48px;
+      box-sizing: border-box;
+    }
+
+    /* ── ロゴ・ヘッダー ── */
+    .login-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .login-logo {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      color: #1a1a1a;
+      margin: 0 0 8px;
+    }
+    .login-subtitle {
+      font-size: 13px;
+      color: #777;
+      margin: 0;
+    }
+
+    /* ── フォームカード ── */
+    .login-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 28px 24px;
+      border: 1px solid #e0e0e0;
+    }
+
+    /* ── フォームフィールド ── */
+    .field {
+      margin-bottom: 20px;
+    }
+    .field:last-of-type {
+      margin-bottom: 0;
+    }
+    .field__label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #555;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+    .field__input-wrap {
+      position: relative;
+    }
+    .field__icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      color: #aaa;
+      flex-shrink: 0;
+    }
+    .field__input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 11px 12px 11px 38px;
+      border: 1px solid #d0d0d0;
+      border-radius: 8px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 14px;
+      color: #1a1a1a;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .field__input::placeholder {
+      color: #bbb;
+    }
+    .field__input:focus {
+      border-color: #1a1a1a;
+    }
+
+    /* ── 送信ボタン ── */
+    .submit-wrap {
+      margin-top: 24px;
+    }
+    .dads-button {
+      --button-color: #1a1a1a;
+      --button-hover-color: #333;
+      --button-active-color: #000;
+    }
+    .submit-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ── フッターリンク ── */
+    .login-footer-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .login-footer-link a {
+      font-size: 13px;
+      color: #555;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .login-footer-link a:hover {
+      color: #1a1a1a;
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- ヘッダー -->
+  <header class="login-header">
+    <p class="login-logo">WHISTLE</p>
+    <p class="login-subtitle">サービスを続けるにはログインしてください</p>
+  </header>
+
+  <!-- フォームカード -->
+  <div class="login-card">
+    <form action="#" method="POST">
+
+      <!-- 名前 -->
+      <div class="field">
+        <label class="field__label" for="name">名前</label>
+        <div class="field__input-wrap">
+          <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <input class="field__input" id="name" name="name" type="text" placeholder="山田 太郎" autocomplete="name">
+        </div>
+      </div>
+
+      <!-- メールアドレス -->
+      <div class="field">
+        <label class="field__label" for="email">メールアドレス</label>
+        <div class="field__input-wrap">
+          <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="m2 7 10 7 10-7"/>
+          </svg>
+          <input class="field__input" id="email" name="email" type="email" placeholder="example@email.com" autocomplete="email">
+        </div>
+      </div>
+
+      <!-- 電話番号 -->
+      <div class="field">
+        <label class="field__label" for="phone">電話番号</label>
+        <div class="field__input-wrap">
+          <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="7" y="2" width="10" height="20" rx="2"/>
+            <circle cx="12" cy="17" r="1"/>
+          </svg>
+          <input class="field__input" id="phone" name="phone" type="tel" placeholder="090-0000-0000" autocomplete="tel">
+        </div>
+      </div>
+
+      <!-- 送信ボタン -->
+      <div class="submit-wrap">
+        <button class="dads-button submit-btn" data-size="md" data-type="solid-fill" type="submit">
+          ログインする
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- 新規登録リンク -->
+  <div class="login-footer-link">
+    <a href="#">新規登録はこちら</a>
+  </div>
+
+</div>
+</body>
+</html>
