@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>試合詳細</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/global.css">
+  <link rel="stylesheet" href="prototype.css">
+  <style>
+    /* スコアカード */
+    .score-card {
+      background: #1a1814;
+      border-radius: 24px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+    }
+
+
+    .schedule-row {
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--color-neutral-solid-gray-200);
+      background: var(--color-neutral-white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .schedule-row--done {
+      background: rgba(243, 244, 246, 0.5);
+      opacity: 0.6;
+    }
+
+    .schedule-row--active {
+      background: var(--color-primitive-blue-50);
+      border: 2px solid var(--color-primitive-blue-200);
+    }
+
+    .schedule-row__match {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-neutral-solid-gray-600);
+      min-width: 48px;
+    }
+
+    .schedule-row__teams {
+      font-size: 16px;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--color-neutral-solid-gray-900);
+    }
+
+    .schedule-row--done .schedule-row__teams {
+      color: var(--color-neutral-solid-gray-600);
+    }
+
+    .schedule-row__result {
+      font-size: 12px;
+      font-style: italic;
+      color: var(--color-neutral-solid-gray-600);
+      min-width: 40px;
+      text-align: right;
+    }
+
+    .schedule-row__active-label {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-primitive-blue-900);
+      min-width: 48px;
+      text-align: right;
+    }
+
+    .schedule-row__time {
+      font-size: 12px;
+      font-style: italic;
+      color: var(--color-neutral-solid-gray-600);
+      min-width: 48px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <a class="nav-back" href="16_participant-event-ongoing.html">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      戻る
+    </a>
+    <h1 class="nav-title">試合詳細</h1>
+    <div class="nav-spacer"></div>
+  </nav>
+
+  <main class="main" style="gap: 32px;">
+
+    <!-- スコアカード -->
+    <div class="score-card">
+      <div class="score-card__status">
+        <div class="live-badge">
+          <div class="live-dot"></div>
+          <span class="live-text">LIVE</span>
+        </div>
+        <span class="match-label">・第2試合</span>
+      </div>
+
+      <div class="score-display">
+        <div class="score-team">
+          <span class="score-team__name">チームA</span>
+          <span class="score-team__num">3</span>
+        </div>
+        <span class="score-sep">:</span>
+        <div class="score-team">
+          <span class="score-team__name">チームB</span>
+          <span class="score-team__num">2</span>
+        </div>
+      </div>
+
+      <p class="score-card__time">残り 12分</p>
+    </div>
+
+    <!-- スケジュールセクション -->
+    <section class="schedule-section">
+      <div class="schedule-heading">
+        <span class="schedule-heading__text">本日のスケジュール</span>
+        <div class="schedule-heading__line"></div>
+      </div>
+
+      <div class="schedule-rows">
+
+        <!-- 第1試合（終了） -->
+        <div class="schedule-row schedule-row--done">
+          <span class="schedule-row__match">第1試合</span>
+          <span class="schedule-row__teams">A vs B</span>
+          <span class="schedule-row__result">3 : 1</span>
+        </div>
+
+        <!-- 第2試合（進行中） -->
+        <div class="schedule-row schedule-row--active">
+          <span class="schedule-row__match">第2試合</span>
+          <span class="schedule-row__teams">A vs C</span>
+          <span class="schedule-row__active-label">進行中</span>
+        </div>
+
+        <!-- 第3試合（未定） -->
+        <div class="schedule-row">
+          <span class="schedule-row__match">第3試合</span>
+          <span class="schedule-row__teams">B vs C</span>
+          <span class="schedule-row__time">15:00〜</span>
+        </div>
+
+        <!-- 決勝（未定） -->
+        <div class="schedule-row">
+          <span class="schedule-row__match">決勝</span>
+          <span class="schedule-row__teams">−</span>
+          <span class="schedule-row__time">15:40〜</span>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script src="prototype-map.js"></script>
+</body>
+</html>

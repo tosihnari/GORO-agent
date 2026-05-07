@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ユーザープロフィール</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/global.css">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/components/button/button.css">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/components/chip-label/chip-label.css">
+  <link rel="stylesheet" href="prototype.css">
+  <style>
+    body {
+      background: var(--color-neutral-solid-gray-50);
+      padding-bottom: 32px;
+    }
+
+    /* ─ プロフィールセクション ─ */
+    .profile-header {
+      background: var(--color-neutral-white);
+      border-bottom: 1px solid var(--color-neutral-solid-gray-100);
+      padding: 32px 16px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .profile-avatar {
+      width: 128px;
+      height: 128px;
+      border-radius: 9999px;
+      border: 4px solid var(--color-neutral-white);
+      box-shadow: 0px 8px 10px -6px rgba(0,0,0,0.10), 0px 20px 25px -5px rgba(0,0,0,0.10);
+      object-fit: cover;
+      display: block;
+    }
+
+    .profile-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-neutral-solid-gray-900);
+      margin: 0;
+      text-align: center;
+      padding-top: 12px;
+    }
+
+    .followers-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .followers-num {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-neutral-solid-gray-900);
+      line-height: 1.556;
+    }
+
+    .followers-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-neutral-solid-gray-600);
+      line-height: 1.43;
+    }
+
+    .followers-link {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+    }
+
+    .followers-arrow {
+      opacity: 0.4;
+    }
+
+    .section-header-link img {
+      width: 14px;
+      height: 14px;
+      opacity: 0.45;
+    }
+
+    .bio-card {
+      align-self: stretch;
+      background: var(--color-neutral-solid-gray-50);
+      border-radius: 12px;
+      outline: 1px solid var(--color-neutral-solid-gray-100);
+      outline-offset: -1px;
+      padding: 16px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-neutral-solid-gray-700);
+      line-height: 1.625;
+      margin: 0;
+    }
+
+    /* ─ 共通フォロワーカード ─ */
+    .mutual-card {
+      align-self: stretch;
+      background: var(--color-neutral-solid-gray-50);
+      border-radius: 12px;
+      outline: 1px solid var(--color-neutral-solid-gray-100);
+      outline-offset: -1px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mutual-avatars {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .mutual-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+      border: 2px solid var(--color-neutral-white);
+      margin-left: -8px;
+      object-fit: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .mutual-avatars .mutual-avatar:first-child {
+      margin-left: 0;
+    }
+
+    .mutual-avatar-more {
+      background: var(--color-neutral-solid-gray-200);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--color-neutral-solid-gray-900);
+      font-family: inherit;
+      outline: 2px solid var(--color-neutral-white);
+      outline-offset: -2px;
+      border: none;
+    }
+
+    .mutual-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-neutral-solid-gray-900);
+      margin: 0;
+      line-height: 1.43;
+    }
+
+    /* ─ フォローボタン ─ */
+    .follow-section {
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .follow-btn {
+      --button-color: var(--color-neutral-solid-gray-900);
+      --button-hover-color: var(--color-neutral-solid-gray-700);
+      --button-active-color: var(--color-neutral-solid-gray-800);
+      width: 100%;
+      border-radius: 12px !important;
+    }
+
+    .follow-hint {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--color-neutral-solid-gray-400);
+      text-align: center;
+      margin: 0;
+      line-height: 1.33;
+    }
+
+    /* ─ スタッツ・最近のイベントセクション ─ */
+    .stats-events-section {
+      background: var(--color-neutral-white);
+      border-top: 1px solid var(--color-neutral-solid-gray-100);
+      border-bottom: 1px solid var(--color-neutral-solid-gray-100);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .section-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-neutral-solid-gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .stat-item {
+      background: var(--color-neutral-solid-gray-50);
+      box-shadow: 0px 1px 2px rgba(0,0,0,0.05);
+      border-radius: 12px;
+      outline: 1px solid var(--color-neutral-solid-gray-100);
+      outline-offset: -1px;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--color-neutral-solid-gray-600);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .stat-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-neutral-solid-gray-900);
+      line-height: 1.4;
+    }
+
+    .stat-unit {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--color-neutral-solid-gray-600);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+    }
+
+    /* ─ イベントリスト ─ */
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .event-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .event-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      background: var(--color-neutral-solid-gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--color-neutral-solid-gray-600);
+    }
+
+    .event-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .event-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .event-title-row .dads-chip-label {
+      font-size: 10px;
+      padding: 0 6px;
+      min-height: 24px;
+      height: 24px;
+      line-height: 24px;
+    }
+    .event-title-row .dads-chip-label__icon { display: none; }
+
+    .event-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-neutral-solid-gray-900);
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .event-meta {
+      font-size: 12px;
+      color: var(--color-neutral-solid-gray-600);
+      margin: 0;
+    }
+
+    .event-row-arrow {
+      width: 16px;
+      height: 16px;
+      opacity: 0.3;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="nav-bar">
+    <button class="icon-btn dads-button" type="button" aria-label="閉じる" onclick="history.back()">
+      <svg width="24" height="24" viewBox="0 -960 960 960" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" fill="currentColor"/>
+      </svg>
+    </button>
+    <p class="nav-title">プロフィール</p>
+    <div class="nav-spacer"></div>
+  </header>
+
+  <!-- プロフィール -->
+  <section class="profile-header" aria-label="プロフィール">
+    <img class="profile-avatar" src="https://placehold.co/128x128" alt="りく/riku">
+    <p class="profile-name">りく/riku</p>
+
+    <div class="followers-row">
+      <a href="#" class="followers-link">
+        <span class="followers-num">84</span>
+        <span class="followers-label">フォロワー</span>
+        <img src="../material/icon/arrow_right.svg" width="14" height="14" alt="" aria-hidden="true" class="followers-arrow">
+      </a>
+    </div>
+
+    <div class="mutual-card">
+      <div class="mutual-avatars">
+        <img class="mutual-avatar" src="https://placehold.co/32x32" alt="" aria-hidden="true">
+        <img class="mutual-avatar" src="https://placehold.co/32x32" alt="" aria-hidden="true">
+        <div class="mutual-avatar mutual-avatar-more" aria-hidden="true">+1</div>
+      </div>
+      <p class="mutual-text">3人の共通のフォロワーがいます</p>
+    </div>
+
+    <p class="bio-card">「バスケとランニングが好きです。週2〜3回活動しています。ガチ勢ではないですが、試合になると本気出します。初めての方も気軽に声かけてください！」</p>
+
+    <div class="follow-section">
+      <button class="dads-button follow-btn" data-type="solid-fill" data-size="lg" type="button">フォローする</button>
+      <p class="follow-hint">相互フォローになると、メッセージを送ることができるようになります</p>
+    </div>
+  </section>
+
+  <!-- スタッツ・最近のイベント -->
+  <section class="stats-events-section" aria-label="スタッツと最近のイベント">
+    <p class="section-label">スタッツ</p>
+
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-label">通算参加回数</span>
+        <div class="stat-value-row">
+          <span class="stat-value">32</span>
+          <span class="stat-unit">回</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">MVP獲得数</span>
+        <div class="stat-value-row">
+          <span class="stat-value">3</span>
+          <span class="stat-unit">回</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">消費カロリー</span>
+        <div class="stat-value-row">
+          <span class="stat-value">8,210</span>
+          <span class="stat-unit">kcal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <p class="section-label" style="padding-top: 0;">最近のイベント参加</p>
+    </div>
+
+    <div class="events-list">
+      <div class="event-row">
+        <div class="event-icon-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+        </div>
+        <div class="event-info">
+          <div class="event-title-row">
+            <p class="event-title">モーニングラン</p>
+            <span class="dads-chip-label" data-style="outline" data-color="gray">エンジョイ</span>
+          </div>
+          <p class="event-meta">2023年11月10日 · ランニング</p>
+        </div>
+        <img class="event-row-arrow" src="../material/icon/arrow_right.svg" alt="" aria-hidden="true">
+      </div>
+
+      <div class="event-row">
+        <div class="event-icon-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="event-info">
+          <div class="event-title-row">
+            <p class="event-title">深夜の3on3マッチ</p>
+            <span class="dads-chip-label" data-style="outline" data-color="gray">ガチ</span>
+          </div>
+          <p class="event-meta">2023年11月08日 · バスケットボール</p>
+        </div>
+        <img class="event-row-arrow" src="../material/icon/arrow_right.svg" alt="" aria-hidden="true">
+      </div>
+
+      <div class="event-row">
+        <div class="event-icon-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+          </svg>
+        </div>
+        <div class="event-info">
+          <div class="event-title-row">
+            <p class="event-title">週末ダブルス練習会</p>
+            <span class="dads-chip-label" data-style="outline" data-color="gray">エンジョイ</span>
+          </div>
+          <p class="event-meta">2023年11月05日 · テニス</p>
+        </div>
+        <img class="event-row-arrow" src="../material/icon/arrow_right.svg" alt="" aria-hidden="true">
+      </div>
+    </div>
+  </section>
+  <script src="prototype-map.js"></script>
+
+</body>
+</html>

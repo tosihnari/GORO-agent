@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>参加者専用ページ（開催後）</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/global.css">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/components/button/button.css">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/components/accordion/accordion.css">
+  <link rel="stylesheet" href="prototype.css">
+  <style>
+    body {
+      color: var(--color-neutral-solid-gray-800);
+      padding-bottom: 72px;
+    }
+
+    /* ── ヒーローセクション（開催後バリアント）── */
+    .event-hero__bg {
+      background: var(--color-neutral-solid-gray-700);
+      padding: 20px 20px 56px;
+    }
+    .event-hero__title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-neutral-white);
+      margin: 0;
+      line-height: 1.4;
+    }
+    .event-hero__card {
+      margin: -40px 16px 0;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+      background: var(--color-neutral-solid-gray-800);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 8px 10px -6px rgba(0,0,0,0.10), 0 20px 25px -5px rgba(0,0,0,0.10);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* 開催後カード内部要素 */
+    .post-event-trophy {
+      text-align: center;
+      font-size: 60px;
+      line-height: 1;
+      margin: 0;
+    }
+    .post-event-message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .post-event-message__title {
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--color-neutral-white);
+      line-height: 1.4;
+      margin: 0;
+      text-align: center;
+    }
+    .post-event-message__subtitle {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-neutral-solid-gray-300);
+      line-height: 1.625;
+      margin: 0;
+      text-align: center;
+    }
+    .mvp-badge {
+      align-self: stretch;
+      background: var(--color-neutral-white);
+      border-radius: 12px;
+      border: 2px solid var(--color-neutral-solid-gray-200);
+      padding: 6px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .mvp-badge__label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-neutral-solid-gray-500);
+      line-height: 1.4;
+      text-align: center;
+    }
+    .mvp-badge__row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mvp-badge__avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1.25px solid var(--color-neutral-solid-gray-100);
+      flex-shrink: 0;
+    }
+    .mvp-badge__avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .mvp-badge__name {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-neutral-solid-gray-800);
+      line-height: 1.75;
+    }
+
+    /* 写真カード（横長） */
+    .photo-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 13px;
+      text-decoration: none;
+      background: var(--color-neutral-solid-gray-600);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .photo-card__header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .photo-card__icon {
+      width: 20px;
+      height: 20px;
+      filter: brightness(0) invert(1);
+      flex-shrink: 0;
+    }
+    .photo-card__label {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-neutral-white);
+      line-height: 1.5;
+      flex: 1;
+    }
+    .photo-card__arrow {
+      color: var(--color-neutral-white);
+    }
+    .photo-card__thumbnails {
+      display: flex;
+      gap: 6px;
+    }
+    .photo-card__thumb {
+      flex: 1;
+      height: 56px;
+      border-radius: 6px;
+      background: var(--color-neutral-solid-gray-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-neutral-solid-gray-400);
+    }
+
+    /* 参加者チーム */
+    .participant-teams {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .participant-team__label {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-neutral-solid-gray-600);
+      margin: 0 0 8px;
+      line-height: 1.5;
+    }
+    .participant-teams .participant-avatars {
+      flex-wrap: wrap;
+      overflow-x: visible;
+      gap: 8px;
+    }
+    .participant-teams .participant-avatar {
+      width: 40px;
+      height: 40px;
+      box-shadow: none;
+      outline: 1px solid var(--color-neutral-solid-gray-200);
+      outline-offset: -1px;
+    }
+    .notice-banner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 16px;
+      padding: 16px;
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--color-neutral-solid-gray-200);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .notice-banner__body { flex: 1; min-width: 0; }
+    .notice-banner__label { font-size: 14px; font-weight: 500; color: var(--color-neutral-solid-gray-800); margin: 0 0 4px; line-height: 1.2; }
+    .notice-banner__text { font-size: 14px; font-weight: 500; color: var(--color-neutral-solid-gray-600); margin: 0; line-height: 1.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  </style>
+</head>
+<body>
+
+  <!-- ナビバー -->
+  <div class="nav-bar">
+    <a class="nav-back" href="javascript:history.back()" aria-label="戻る">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </a>
+    <p class="nav-title">参加者専用ページ</p>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- ヒーロー（開催後） -->
+  <div class="event-hero">
+    <div class="event-hero__bg">
+      <p class="event-hero__title">バスケ エンジョイ交流戦 初心者・未経験者歓迎</p>
+    </div>
+    <div class="event-hero__card">
+      <p class="post-event-trophy">🏀</p>
+
+      <div class="post-event-message">
+        <p class="post-event-message__title">お疲れ様でした！</p>
+        <p class="post-event-message__subtitle">ナイスプレー！またコートでお会いしましょう👋</p>
+      </div>
+
+      <div class="mvp-badge">
+        <span class="mvp-badge__label">本日のMVP</span>
+        <div class="mvp-badge__row">
+          <div class="mvp-badge__avatar">
+            <img src="https://placehold.co/40x40" alt="">
+          </div>
+          <span class="mvp-badge__name">あなた（山田 太郎）</span>
+        </div>
+      </div>
+
+      <a href="30_album.html" class="photo-card">
+        <div class="photo-card__header">
+          <img src="../material/icon/camera.svg" class="photo-card__icon" width="20" height="20" alt="" aria-hidden="true">
+          <span class="photo-card__label">写真（15枚）</span>
+          <svg class="photo-card__arrow" width="8" height="12" viewBox="0 0 16 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 2 14 12 2 22"/></svg>
+        </div>
+        <div class="photo-card__thumbnails">
+          <div class="photo-card__thumb"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <div class="photo-card__thumb"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <div class="photo-card__thumb"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <div class="photo-card__thumb"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <a href="19_participant-event-dm.html" class="notice-banner">
+    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="var(--color-neutral-solid-gray-700)" aria-hidden="true" style="flex-shrink:0">
+      <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+    </svg>
+    <div class="notice-banner__body">
+      <p class="notice-banner__label">運営からのメッセージ</p>
+      <p class="notice-banner__text">未経験の方も大歓迎です！みんなで…</p>
+    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="10" fill="var(--color-neutral-solid-gray-400)" aria-hidden="true" style="flex-shrink:0">
+      <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/>
+    </svg>
+  </a>
+
+  <!-- フィルターチップ -->
+  <div class="filter-chips-wrap">
+    <div class="filter-chips-scroll" role="navigation" aria-label="セクション">
+      <button class="filter-chip filter-chip--active" data-target="section-participants">参加者</button>
+      <button class="filter-chip" data-target="section-venue">開催時間・場所</button>
+      <button class="filter-chip" data-target="section-equipment">設備・持ち物</button>
+      <button class="filter-chip" data-target="section-schedule">当日の流れ</button>
+      <button class="filter-chip" data-target="section-organizer">主催者情報</button>
+      <button class="filter-chip" data-target="section-cancel">キャンセル</button>
+    </div>
+  </div>
+
+  <!-- コンテンツ -->
+  <main class="content">
+
+    <!-- 参加者エリア -->
+    <div class="participant-section" id="section-participants">
+      <div class="participant-header">
+        <div class="participant-header__left">
+          <p class="participant-header__title">参加者</p>
+          <p class="participant-header__count">(12名)</p>
+        </div>
+        <button type="button" class="participants-invite-btn" aria-label="友達を誘う">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          友達を誘う
+        </button>
+      </div>
+      <div class="participant-teams" aria-label="参加者一覧">
+        <div class="participant-team">
+          <p class="participant-team__label">チームA</p>
+          <div class="participant-avatars">
+            <a href="21_user-profile.html" class="participant-avatar"><div class="img-placeholder" aria-label="参加者1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></a>
+            <a href="21_user-profile.html" class="participant-avatar"><div class="img-placeholder" aria-label="参加者2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></a>
+            <a href="21_user-profile.html" class="participant-avatar"><div class="img-placeholder" aria-label="参加者3"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></a>
+            <a href="21_user-profile.html" class="participant-avatar"><div class="img-placeholder" aria-label="参加者4"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></a>
+          </div>
+        </div>
+        <div class="participant-team">
+          <p class="participant-team__label">チームB</p>
+          <div class="participant-avatars">
+            <a href="21_user-profile.html" class="participant-avatar"><div class="img-placeholder" aria-label="参加者5"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></a>
+            <a href="21_user-profile.html" class="participant-avatar"><div class="img-placeholder" aria-label="参加者6"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></a>
+            <a href="21_user-profile.html" class="participant-avatar"><div class="img-placeholder" aria-label="参加者7"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></a>
+            <a href="21_user-profile.html" class="participant-avatar"><div class="img-placeholder" aria-label="参加者8"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></a>
+          </div>
+        </div>
+        <div class="participant-team">
+          <p class="participant-team__label">チームC</p>
+          <div class="participant-avatars">
+            <a href="21_user-profile.html" class="participant-avatar"><div class="img-placeholder" aria-label="参加者9"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></a>
+            <a href="21_user-profile.html" class="participant-avatar"><div class="img-placeholder" aria-label="参加者10"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></a>
+            <a href="21_user-profile.html" class="participant-avatar"><div class="img-placeholder" aria-label="参加者11"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></a>
+            <a href="21_user-profile.html" class="participant-avatar"><div class="img-placeholder" aria-label="参加者12"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 開催時間・場所 -->
+    <section id="section-venue" class="section">
+      <h2 class="section-title">開催時間・場所</h2>
+
+      <div class="section-group">
+        <p class="section-sub">集合・受付時間</p>
+        <p style="font-size:14px;color:var(--color-neutral-solid-gray-800);margin:0;">4/12(土) 09:55 受付開始</p>
+      </div>
+
+      <div class="section-group">
+        <p class="section-sub">住所</p>
+        <p style="font-size:14px;color:var(--color-neutral-solid-gray-800);margin:0 0 10px;">神奈川県藤沢市本藤沢４丁目２−１ スポーツセンター</p>
+        <div class="venue-map" role="img" aria-label="会場地図">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+      </div>
+
+      <div class="section-group">
+        <p class="section-sub">アクセス</p>
+        <div class="venue-access-group">
+          <div>
+            <p class="venue-access-row__type">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="5" y="2" width="14" height="20" rx="2"/>
+                <path d="M9 7h6M12 17v0"/>
+              </svg>
+              電車でお越しの方
+            </p>
+            <p class="venue-access-row__detail">小田急江ノ島線「片瀬江ノ島駅」徒歩5分</p>
+          </div>
+          <div>
+            <p class="venue-access-row__type">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-5.4A1 1 0 0 0 12.4 5H5a1 1 0 0 0-.96.68L3 11"/>
+                <circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/>
+              </svg>
+              お車でお越しの方
+            </p>
+            <p class="venue-access-row__detail">専用駐車場あり（30台・先着順）</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 設備・持ち物 -->
+    <section id="section-equipment" class="section">
+      <h2 class="section-title">設備・持ち物</h2>
+
+      <div class="section-group">
+        <p class="section-sub">設備</p>
+        <!-- アイコンチップ -->
+        <div class="facility-chips">
+          <div class="facility-chip facility-chip--available">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-5.4A1 1 0 0 0 12.4 5H5a1 1 0 0 0-.96.68L3 11"/>
+              <circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/>
+            </svg>
+            駐車場
+          </div>
+          <div class="facility-chip facility-chip--available">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/>
+            </svg>
+            更衣室
+          </div>
+          <div class="facility-chip facility-chip--available">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M5 22v-7m0-4V2m7 20v-4m0-7V2m7 20V9m0-7v0"/>
+              <path d="M2 15h6M9 8h6M16 14h6"/>
+            </svg>
+            お手洗い
+          </div>
+          <div class="facility-chip facility-chip--unavailable">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="4" y="4" width="16" height="16" rx="2"/>
+              <path d="M9 9h6M9 13h4"/>
+            </svg>
+            自販機
+          </div>
+        </div>
+        <!-- 設備詳細テーブル -->
+        <div class="facility-list">
+          <div class="facility-row">
+            <span class="facility-row__name">更衣室</span>
+            <span class="facility-row__desc">教室内でお着替えいただけます。</span>
+          </div>
+          <div class="facility-row">
+            <span class="facility-row__name">お手洗い</span>
+            <span class="facility-row__desc">会場内にあり、自由に利用できます。</span>
+          </div>
+          <div class="facility-row">
+            <span class="facility-row__name">自販機</span>
+            <span class="facility-row__desc">なし（コンビニまで徒歩3分）</span>
+          </div>
+          <div class="facility-row">
+            <span class="facility-row__name">駐車場</span>
+            <span class="facility-row__desc">30台分ご利用いただけます。先着順。</span>
+          </div>
+          <div class="facility-row">
+            <span class="facility-row__name">その他</span>
+            <span class="facility-row__desc">コンビニまで徒歩3分・スーパー徒歩8分</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-group">
+        <p class="section-sub">持ち物</p>
+        <div class="items-category">
+          <p class="items-category__label">必須</p>
+          <ul class="items-checklist">
+            <li class="items-checklist__item">運動できる服装（Tシャツ・短パン等）</li>
+            <li class="items-checklist__item">シューズ</li>
+          </ul>
+        </div>
+        <div class="items-category">
+          <p class="items-category__label">あると便利</p>
+          <ul class="items-checklist">
+            <li class="items-checklist__item">タオル</li>
+            <li class="items-checklist__item">飲み物</li>
+            <li class="items-checklist__item">着替え</li>
+          </ul>
+        </div>
+        <div class="supplement-box">
+          <svg class="supplement-box__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M8 5v3.5M8 10.5v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <p class="supplement-box__text">ボールやネットなどの用具は主催者が用意します。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 当日の流れ -->
+    <section id="section-schedule" class="section">
+      <h2 class="section-title">当日の流れ</h2>
+      <ol class="timeline">
+        <li class="timeline__item">
+          <div class="timeline__dot" aria-hidden="true">1</div>
+          <div class="timeline__body">
+            <div class="timeline__header">
+              <p class="timeline__title">集合・受付</p>
+              <span class="timeline__duration">約10分</span>
+            </div>
+            <p class="timeline__desc">会場に集合して受付を行います。</p>
+          </div>
+        </li>
+        <li class="timeline__item">
+          <div class="timeline__dot" aria-hidden="true">2</div>
+          <div class="timeline__body">
+            <div class="timeline__header">
+              <p class="timeline__title">ウォームアップ</p>
+              <span class="timeline__duration">約15分</span>
+            </div>
+            <p class="timeline__desc">準備運動で体を慣らします。</p>
+          </div>
+        </li>
+        <li class="timeline__item">
+          <div class="timeline__dot" aria-hidden="true">3</div>
+          <div class="timeline__body">
+            <div class="timeline__header">
+              <p class="timeline__title">ゲーム形式で楽しむ</p>
+              <span class="timeline__duration">約50分</span>
+            </div>
+            <p class="timeline__desc">チームに分かれてバスケを楽しみます。</p>
+          </div>
+        </li>
+        <li class="timeline__item">
+          <div class="timeline__dot" aria-hidden="true">4</div>
+          <div class="timeline__body">
+            <div class="timeline__header">
+              <p class="timeline__title">片付け・解散</p>
+              <span class="timeline__duration">約10分</span>
+            </div>
+            <p class="timeline__desc">最後はみんなで片付けをして解散します。</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- 参加者の傾向 -->
+    <section class="section">
+      <h2 class="section-title">参加者の傾向</h2>
+      <div id="participant-trend-container">
+        <img src="../material/screen/参加者傾向.png" alt="参加者の傾向" style="width: 100%; display: block; height: auto;">
+      </div>
+    </section>
+
+    <!-- 主催者情報 -->
+    <section id="section-organizer" class="section">
+      <h2 class="section-title">主催者情報</h2>
+      <div class="organizer-profile-card">
+        <div class="organizer-profile-card__main">
+          <div class="organizer-profile-card__avatar-wrap">
+            <div class="organizer-profile-card__avatar">
+              <div class="img-placeholder" aria-label="主催者アイコン">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+            </div>
+            <div class="organizer-profile-card__badge" aria-label="公式認定">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M3 7L5.5 9.5L11 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="organizer-profile-card__body">
+            <p class="organizer-profile-card__name">Whistle【公式】</p>
+            <p class="organizer-profile-card__description">ホイッスル公式です。初心者の方でも安心して参加できる、ゆるく楽しめるスポーツイベントを開催しています。1人参加や久しぶりの運動でも気軽にご参加いただけます。</p>
+          </div>
+        </div>
+        <div class="organizer-profile-card__stats">
+          <div class="organizer-profile-card__stat">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            <span class="organizer-profile-card__stat-text">累計500人以上が参加</span>
+          </div>
+          <div class="organizer-profile-card__stat">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span class="organizer-profile-card__stat-text">50回以上開催</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- キャンセル -->
+    <section id="section-cancel" class="section">
+      <h2 class="section-title">キャンセルポリシー</h2>
+      <p style="font-size:13px;color:var(--color-neutral-solid-gray-700);margin:0 0 12px;line-height:1.7;">イベント開始前日・当日のキャンセルはキャンセル料が発生します。お早めのご連絡をお願いします。</p>
+      <div class="facility-list" style="margin-bottom:16px;">
+        <div class="facility-row">
+          <span class="facility-row__name">8日以上前</span>
+          <span class="facility-row__desc">キャンセル料なし（全額返金）</span>
+        </div>
+        <div class="facility-row">
+          <span class="facility-row__name">7日〜前日</span>
+          <span class="facility-row__desc">参加費の50%</span>
+        </div>
+        <div class="facility-row">
+          <span class="facility-row__name">当日</span>
+          <span class="facility-row__desc">参加費の100%</span>
+        </div>
+      </div>
+      <button class="dads-button dads-button--danger" data-type="outline" data-size="md" style="width:100%;justify-content:center;" type="button">キャンセルを申請する</button>
+    </section>
+
+    <!-- よくある質問 -->
+    <section class="section">
+      <h2 class="section-title">よくある質問</h2>
+      <div style="display:flex;flex-direction:column;gap:8px; --color-primitive-blue-1000: var(--color-neutral-solid-gray-800); --color-primitive-blue-900: var(--color-neutral-solid-gray-700);">
+        <details class="dads-accordion">
+          <summary id="faq-1" class="dads-accordion__summary">
+            <span class="dads-accordion__icon">
+              <svg class="dads-accordion__icon-svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3.3 7.3L12 16L20.7 7.3" fill="none" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+            <h3>初めてでも参加できますか？</h3>
+          </summary>
+          <div class="dads-accordion__content">
+            <div style="margin-bottom: 1lh;">もちろんです！このイベントは初心者・未経験者を大歓迎しています。参加者の約7割が初参加です。運営スタッフが丁寧にサポートするのでご安心ください。</div>
+            <a href="#faq-1" class="dads-accordion__back-link">
+              <svg class="dads-accordion__back-link-icon" width="24" height="24" fill="none" aria-hidden="true">
+                <path d="M6 7V14.5C6 16.8 8.2 19 10.5 19C12.8 19 15 16.8 15 14.5V6M10.709 9.7L15 5.414L19.291 9.7" stroke="currentColor" stroke-width="2" />
+              </svg>
+              「初めてでも参加できますか？」の先頭に戻る
+            </a>
+          </div>
+        </details>
+        <details class="dads-accordion">
+          <summary id="faq-2" class="dads-accordion__summary">
+            <span class="dads-accordion__icon">
+              <svg class="dads-accordion__icon-svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3.3 7.3L12 16L20.7 7.3" fill="none" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+            <h3>一人で参加しても大丈夫ですか？</h3>
+          </summary>
+          <div class="dads-accordion__content">
+            <div style="margin-bottom: 1lh;">はい、参加者の8割以上が一人参加です。チーム分けは運営が行うので、知り合いがいなくても自然と打ち解けられます。</div>
+            <a href="#faq-2" class="dads-accordion__back-link">
+              <svg class="dads-accordion__back-link-icon" width="24" height="24" fill="none" aria-hidden="true">
+                <path d="M6 7V14.5C6 16.8 8.2 19 10.5 19C12.8 19 15 16.8 15 14.5V6M10.709 9.7L15 5.414L19.291 9.7" stroke="currentColor" stroke-width="2" />
+              </svg>
+              「一人で参加しても大丈夫ですか？」の先頭に戻る
+            </a>
+          </div>
+        </details>
+        <details class="dads-accordion">
+          <summary id="faq-3" class="dads-accordion__summary">
+            <span class="dads-accordion__icon">
+              <svg class="dads-accordion__icon-svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3.3 7.3L12 16L20.7 7.3" fill="none" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+            <h3>服装や持ち物は何が必要ですか？</h3>
+          </summary>
+          <div class="dads-accordion__content">
+            <div style="margin-bottom: 1lh;">動きやすい服装と室内シューズをご用意ください。飲み物とタオルも忘れずに。更衣室はありますが、シャワーはありません。</div>
+            <a href="#faq-3" class="dads-accordion__back-link">
+              <svg class="dads-accordion__back-link-icon" width="24" height="24" fill="none" aria-hidden="true">
+                <path d="M6 7V14.5C6 16.8 8.2 19 10.5 19C12.8 19 15 16.8 15 14.5V6M10.709 9.7L15 5.414L19.291 9.7" stroke="currentColor" stroke-width="2" />
+              </svg>
+              「服装や持ち物は何が必要ですか？」の先頭に戻る
+            </a>
+          </div>
+        </details>
+        <details class="dads-accordion">
+          <summary id="faq-4" class="dads-accordion__summary">
+            <span class="dads-accordion__icon">
+              <svg class="dads-accordion__icon-svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3.3 7.3L12 16L20.7 7.3" fill="none" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+            <h3>キャンセルはできますか？</h3>
+          </summary>
+          <div class="dads-accordion__content">
+            <div style="margin-bottom: 1lh;">開催3日前まではキャンセル可能です。それ以降のキャンセルはキャンセル料が発生する場合があります。</div>
+            <a href="#faq-4" class="dads-accordion__back-link">
+              <svg class="dads-accordion__back-link-icon" width="24" height="24" fill="none" aria-hidden="true">
+                <path d="M6 7V14.5C6 16.8 8.2 19 10.5 19C12.8 19 15 16.8 15 14.5V6M10.709 9.7L15 5.414L19.291 9.7" stroke="currentColor" stroke-width="2" />
+              </svg>
+              「キャンセルはできますか？」の先頭に戻る
+            </a>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- アプリDL -->
+    <section class="section">
+      <div class="app-download-card">
+        <div class="app-download-card__header">
+          <div class="app-download-card__icon">
+            <img src="../material/icon/phone.svg" width="24" height="24" alt="" aria-hidden="true">
+          </div>
+          <div class="app-download-card__text">
+            <p class="app-download-card__title">アプリでもっと便利に！</p>
+            <p class="app-download-card__subtitle">プッシュ通知で最新情報を受け取れます</p>
+          </div>
+        </div>
+        <div class="app-download-card__badges">
+          <a href="#"><img src="../material/screen/apple.png" alt="App Storeからダウンロード" class="app-download-card__badge"></a>
+          <a href="#"><img src="../material/screen/google.png" alt="Google Playで手に入れよう" class="app-download-card__badge"></a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ── 参加予定の人 シート ── -->
+  <dialog id="participants-sheet" class="bottom-sheet" aria-labelledby="participants-sheet-title">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-header">
+      <p class="sheet-title" id="participants-sheet-title">参加予定</p>
+      <div class="sheet-header__actions">
+        <button type="button" class="participants-invite-btn" aria-label="友達を誘う">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          友達を誘う
+        </button>
+        <button class="sheet-close" id="participants-close" aria-label="閉じる">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="sheet-body">
+
+      <!-- 参加予定ユーザー一覧 -->
+      <div class="participant-list">
+        <div class="participant-item">
+          <div class="participant-avatar">R</div>
+          <div class="participant-info">
+            <div class="participant-name-row">
+              <p class="participant-name">りく / rikuto</p>
+              <span class="participant-level">放課後レベル</span>
+            </div>
+            <p class="participant-relation">前回のイベントで一緒</p>
+          </div>
+        </div>
+        <div class="participant-item">
+          <div class="participant-avatar">H</div>
+          <div class="participant-info">
+            <div class="participant-name-row">
+              <p class="participant-name">hina__</p>
+              <span class="participant-level">部活レベル</span>
+            </div>
+            <p class="participant-relation">前回のイベントで一緒</p>
+          </div>
+        </div>
+        <div class="participant-item">
+          <div class="participant-avatar">Y</div>
+          <div class="participant-info">
+            <div class="participant-name-row">
+              <p class="participant-name">ゆうま</p>
+              <span class="participant-level">部活レベル</span>
+            </div>
+            <p class="participant-relation">3回同じイベントに参加しています</p>
+          </div>
+        </div>
+        <div class="participant-item">
+          <div class="participant-avatar">M</div>
+          <div class="participant-info">
+            <div class="participant-name-row">
+              <p class="participant-name">みおん._.</p>
+              <span class="participant-level">放課後レベル</span>
+            </div>
+            <p class="participant-relation">3回同じイベントに参加しています</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 参加傾向 -->
+      <div class="trend-section">
+        <p class="trend-section__title">現在の参加の傾向</p>
+
+        <!-- 年齢層 -->
+        <div class="trend-block">
+          <p class="trend-block__label">年齢層</p>
+          <div class="age-trend">
+            <div class="age-trend__track" aria-hidden="true"></div>
+            <div class="age-trend__items" role="img" aria-label="年齢層の傾向：20代・30代が多い">
+              <div class="age-item">
+                <div class="age-item__dot-wrap"><div class="age-item__dot"></div></div>
+                <span class="age-item__label">10代</span>
+              </div>
+              <div class="age-item">
+                <div class="age-item__dot-wrap"><div class="age-item__dot age-item__dot--active"></div></div>
+                <span class="age-item__label age-item__label--active">20代</span>
+              </div>
+              <div class="age-item">
+                <div class="age-item__dot-wrap"><div class="age-item__dot age-item__dot--active"></div></div>
+                <span class="age-item__label age-item__label--active">30代</span>
+              </div>
+              <div class="age-item">
+                <div class="age-item__dot-wrap"><div class="age-item__dot"></div></div>
+                <span class="age-item__label">40代</span>
+              </div>
+              <div class="age-item">
+                <div class="age-item__dot-wrap"><div class="age-item__dot"></div></div>
+                <span class="age-item__label">50代</span>
+              </div>
+              <div class="age-item">
+                <div class="age-item__dot-wrap"><div class="age-item__dot"></div></div>
+                <span class="age-item__label">60代</span>
+              </div>
+              <div class="age-item">
+                <div class="age-item__dot-wrap"><div class="age-item__dot"></div></div>
+                <span class="age-item__label">70代〜</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 男女比 -->
+        <div class="trend-block">
+          <p class="trend-block__label">男女比</p>
+          <div class="gender-ratio" role="img" aria-label="男女比：男性がやや多い">
+            <span class="gender-ratio__label">男性</span>
+            <div class="gender-ratio__track">
+              <div class="gender-ratio__dot" aria-hidden="true"></div>
+            </div>
+            <span class="gender-ratio__label">女性</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </dialog>
+
+  <script>
+    // フィルターチップのクリック → スクロール
+    const chips = document.querySelectorAll('.filter-chip');
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('filter-chip--active'));
+        chip.classList.add('filter-chip--active');
+        const target = document.getElementById(chip.dataset.target);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // 参加予定シート
+    const participantsSheet = document.getElementById('participants-sheet');
+    document.getElementById('participants-close').addEventListener('click', () => participantsSheet.close());
+    participantsSheet.addEventListener('click', e => { if (e.target === participantsSheet) participantsSheet.close(); });
+
+    // スクロール位置に連動してチップをアクティブ化
+    const sections = document.querySelectorAll('section[id]');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          chips.forEach(c => c.classList.remove('filter-chip--active'));
+          const active = document.querySelector(`.filter-chip[data-target="${id}"]`);
+          if (active) {
+            active.classList.add('filter-chip--active');
+            active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          }
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    sections.forEach(s => io.observe(s));
+  </script>
+
+  <script src="prototype-map.js"></script>
+</body>
+</html>

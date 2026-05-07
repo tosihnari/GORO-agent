@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>写真</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/global.css">
+  <link rel="stylesheet" href="prototype.css">
+  <style>
+    body {
+      background: var(--color-neutral-solid-gray-100);
+    }
+
+    /* nav-title の上書き（このページだけ 20px / 500） */
+    .nav-title {
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .album-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .album-photo {
+      width: 100%;
+      display: block;
+      aspect-ratio: 390 / 715;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ナビバー -->
+  <div class="nav-bar">
+    <a class="nav-back" href="javascript:history.back()" aria-label="戻る">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </a>
+    <p class="nav-title">写真</p>
+    <div class="nav-spacer"></div>
+  </div>
+
+  <!-- アルバム -->
+  <div class="album-list">
+    <img class="album-photo" src="../material/screen/写真.png" alt="写真1">
+    <img class="album-photo" src="../material/screen/写真.png" alt="写真2">
+    <img class="album-photo" src="../material/screen/写真.png" alt="写真3">
+  </div>
+
+  <script src="prototype-map.js"></script>
+</body>
+</html>

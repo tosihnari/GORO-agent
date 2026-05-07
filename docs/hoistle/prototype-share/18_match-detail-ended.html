@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>試合詳細</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../design-system/design-system-example-components-html-main/src/global.css">
+  <link rel="stylesheet" href="prototype.css">
+  <style>
+    /* 表彰カード */
+    .award-card {
+      background: var(--color-neutral-solid-gray-800);
+      border-radius: 24px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.10), 0 8px 10px -6px rgba(0,0,0,0.10);
+    }
+
+    .award-trophy {
+      text-align: center;
+      font-size: 60px;
+      line-height: 1;
+      margin: 0;
+    }
+
+    .award-message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .award-message__title {
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--color-neutral-white);
+      line-height: 1.4;
+      margin: 0;
+      text-align: center;
+    }
+
+    .award-message__subtitle {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-neutral-solid-gray-300);
+      line-height: 1.625;
+      margin: 0;
+      text-align: center;
+    }
+
+    /* MVP バッジ */
+    .mvp-badge {
+      background: var(--color-neutral-white);
+      border-radius: 12px;
+      border: 2px solid var(--color-neutral-solid-gray-200);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mvp-badge__avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--color-neutral-solid-gray-100);
+      flex-shrink: 0;
+    }
+
+    .mvp-badge__avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .mvp-badge__info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .mvp-badge__label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-neutral-solid-gray-500);
+    }
+
+    .mvp-badge__name {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-neutral-solid-gray-800);
+      line-height: 1.5;
+    }
+
+    .mvp-badge__stat {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-neutral-solid-gray-500);
+      line-height: 1.4;
+    }
+
+    .mvp-badge__note {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-neutral-solid-gray-700);
+      line-height: 1.4;
+    }
+
+    /* 全試合結果 行 */
+    .result-row {
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--color-neutral-solid-gray-200);
+      background: var(--color-neutral-white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .result-row--highlight {
+      background: var(--color-neutral-solid-gray-50);
+    }
+
+    .result-row__teams {
+      font-size: 16px;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--color-neutral-solid-gray-600);
+    }
+
+    .result-row__score {
+      font-size: 20px;
+      font-weight: 900;
+      font-style: italic;
+      color: var(--color-neutral-solid-gray-900);
+      letter-spacing: 0.04em;
+    }
+
+    /* 写真ベントーグリッド */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 148px 120px;
+      gap: 8px;
+    }
+
+    .bento-cell {
+      background: var(--color-neutral-solid-gray-100);
+      border-radius: 12px;
+      border: 1px solid var(--color-neutral-solid-gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .bento-cell--main {
+      grid-column: 1;
+      grid-row: 1 / 3;
+    }
+
+    .bento-cell img {
+      width: 32px;
+      height: 32px;
+      opacity: 0.4;
+    }
+
+    .photo-more-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-neutral-solid-gray-700);
+      text-decoration: none;
+      padding-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <a class="nav-back" href="17_participant-event-ended.html">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      戻る
+    </a>
+    <h1 class="nav-title">試合詳細</h1>
+    <div class="nav-spacer"></div>
+  </nav>
+
+  <main class="main" style="gap: 32px;">
+
+    <!-- 表彰カード -->
+    <div class="award-card">
+      <p class="award-trophy">🏆</p>
+      <div class="award-message">
+        <p class="award-message__title">チーム優勝おめでとう！</p>
+        <p class="award-message__subtitle">全3試合 · 12名参加 最高の戦いでした</p>
+      </div>
+      <div class="mvp-badge">
+        <div class="mvp-badge__avatar">
+          <img src="https://placehold.co/56x56" alt="">
+        </div>
+        <div class="mvp-badge__info">
+          <span class="mvp-badge__label">本日のMVP</span>
+          <span class="mvp-badge__name">あなた（山田 太郎）</span>
+          <span class="mvp-badge__stat">3ゴール・チームA最多得点</span>
+          <span class="mvp-badge__note">今日の主役でした ✨</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 全試合結果 -->
+    <section class="schedule-section">
+      <div class="schedule-heading">
+        <span class="schedule-heading__text">全試合結果</span>
+        <div class="schedule-heading__line"></div>
+      </div>
+      <div class="schedule-rows">
+        <div class="result-row result-row--highlight">
+          <span class="result-row__teams">A vs B</span>
+          <span class="result-row__score">3 : 1</span>
+        </div>
+        <div class="result-row result-row--highlight">
+          <span class="result-row__teams">A vs C</span>
+          <span class="result-row__score">2 : 2</span>
+        </div>
+        <div class="result-row">
+          <span class="result-row__teams">B vs C</span>
+          <span class="result-row__score">1 : 3</span>
+        </div>
+      </div>
+    </section>
+
+
+  </main>
+
+  <script src="prototype-map.js"></script>
+</body>
+</html>
